@@ -109,7 +109,8 @@
 		// echo '<pre>'; print_r($user); die;
 		$nama_module = $_SESSION['web']['nama_module'];
 		$active_kasir = strpos($nama_module, 'kasir') !== false ? 'active' : '';
-		$active_penjualan = strpos($nama_module, 'penjualan-mobile') !== false ? 'active' : '';;
+		$active_penjualan = strpos($nama_module, 'penjualan-mobile') !== false ? 'active' : '';
+		$active_dapur_penjualan = strpos($nama_module, 'dapur-penjualan') !== false ? 'active' : '';
 		$active_barang = strpos($nama_module, 'barang-mobile') !== false ? 'active' : '';
 		?>
 		<nav class="navbar navbar-dark navbar-footer navbar-expand fixed-bottom">
@@ -119,12 +120,34 @@
 				</li>
 			</ul>
 			<ul class="navbar-nav nav-justified w-100">
-				<li class="nav-item bg-warning">
-					<a href="<?= base_url() ?>/pos-kasir" id="menu-kasir" class="nav-link <?= $active_kasir ?> link-spa"><i class="fas fa-cash-register"></i><span class="hide-mobile ms-2">Kasir</span></a>
-				</li>
-				<li class="nav-item bg-warning">
+				<?php
+				if (has_permission('create', 'pos-kasir')) {
+				?>
+					<li class="nav-item bg-warning">
+						<a href="<?= base_url() ?>/pos-kasir" id="menu-kasir" class="nav-link <?= $active_kasir ?> link-spa"><i class="fas fa-cash-register"></i><span class="hide-mobile ms-2">Pesanan</span></a>
+					</li>
+				<?php
+				} ?>
+				<?php
+				if (has_permission('create', 'dapur-penjualan')) {
+				?>
+					<li class="nav-item bg-warning">
+						<a href="<?= base_url() ?>/dapur-penjualan" id="menu-invoice" class="nav-link <?= $active_dapur_penjualan ?> link-spa"><i class="fas fa-receipt"></i><span class="hide-mobile ms-2">Invoice</span></a>
+					</li>
+				<?php
+				} ?>
+				<?php
+				if (has_permission('', 'penjualan-mobile')) {
+				?>
+					<li class="nav-item bg-warning">
+						<a href="<?= base_url() ?>/penjualan-mobile" id="menu-invoice" class="nav-link <?= $active_penjualan ?> link-spa"><i class="fas fa-receipt"></i><span class="hide-mobile ms-2">Invoice</span></a>
+					</li>
+				<?php
+				} ?>
+
+				<!-- <li class="nav-item bg-warning">
 					<a href="<?= base_url() ?>/penjualan-mobile" id="menu-invoice" class="nav-link <?= $active_penjualan ?> link-spa"><i class="fas fa-receipt"></i><span class="hide-mobile ms-2">Invoice</span></a>
-				</li>
+				</li> -->
 				<?php
 				if (has_permission('update_all', 'barang-mobile')) {
 				?>

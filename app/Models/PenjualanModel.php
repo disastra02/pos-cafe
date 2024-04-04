@@ -277,6 +277,7 @@ class PenjualanModel extends \App\Models\BaseModel
 			$data_db_barang[$key]['harga_neto'] = $harga_barang;
 			$data_db_barang[$key]['harga_pokok_total'] = $_POST['harga_pokok'][$key] * $qty_pengali;
 			$data_db_barang[$key]['untung_rugi'] = $untung_rugi;
+			$data_db_barang[$key]['status'] = 0;
 
 			$sub_total += $harga_barang;
 		}
@@ -297,6 +298,8 @@ class PenjualanModel extends \App\Models\BaseModel
 		$data_db['jenis_bayar'] = $_POST['jenis_bayar'];
 		$data_db['harga_pokok'] = $total_harga_pokok;
 		$data_db['untung_rugi'] = $total_untung_rugi;
+		$data_db['id_meja'] = $_POST['nomor_meja'];
+		$data_db['customer_nama'] = $_POST['name_customer'];
 
 		// Invoice
 		$sql = 'LOCK TABLES penjualan WRITE, setting WRITE, penjualan_detail WRITE, penjualan_bayar WRITE';
@@ -392,11 +395,11 @@ class PenjualanModel extends \App\Models\BaseModel
 			$status = 'kurang_bayar';
 		}
 
-		$data_db['status'] = $status;
+		$data_db['status'] = $_POST['jenis_bayar'] == 'pending' ? 'pending' : $status;
 
 		// Save table penjualan_barang, penjualan_layanan		
 		if (!empty($_POST['id'])) {
-			$data_db['id_user_update'] = $_SESSION['user']['id_user'];
+			$data_db['id_user_update'] = $_SESSION ['user']['id_user'];
 			$data_db['tgl_update'] = date('Y-m-d H:i:s');
 			$query = $this->db->table('penjualan')->update($data_db, ['id_penjualan' => $_POST['id']]);
 			$this->db->table('penjualan_detail')->delete(['id_penjualan' => $_POST['id']]);
@@ -408,7 +411,7 @@ class PenjualanModel extends \App\Models\BaseModel
 			$query = $this->db->table('penjualan')->insert($data_db);
 			$id_penjualan = $this->db->insertID();
 		}
-
+  
 		// Save tabel penjualan_bayar
 		if ($total_bayar) {
 			foreach ($_POST['jml_bayar'] as $key => $val) {

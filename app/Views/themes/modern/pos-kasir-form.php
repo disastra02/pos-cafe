@@ -300,7 +300,25 @@
 						</table>
 					</form>
 					<form class="form-bayar" style="display: none">
+						<!-- Input Hidden -->
+						<input type="hidden" name="jenis_bayar" value="pending">
+						<input type="hidden" name="jml_bayar[]" value="0">
+						<!-- End Input Hidden -->
+
+						<div class="form-group row mb-3">
+							<label class="col-sm-3 col-form-label">Nomor Meja <span class="text-danger">*</span></label>
+							<div class="col-sm-9">
+								<?= options(['name' => 'nomor_meja', 'required' => 'required'], $meja) ?>
+							</div>
+						</div>
+						
 						<div class="row mb-3">
+							<label class="col-sm-3 col-form-label">Customer <span class="text-danger">*</span></label>
+							<div class="col-sm-9">
+								<input class="form-control name-customer" type="text" name="name_customer" required="required">
+							</div>
+						</div>
+						<!-- <div class="row mb-3">
 							<label class="col-sm-3 col-form-label">Jml. Tagihan</label>
 							<div class="col-sm-9">
 								<input class="form-control jml-tagihan number" inputmode="numeric" type="text" name="total_tagihan" value="0" required="required">
@@ -324,7 +342,7 @@
 							<div class="col-sm-9">
 								<div class="kembali">0</div>
 							</div>
-						</div>
+						</div> -->
 					</form>
 				</div>
 			</div>
@@ -332,7 +350,7 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="right-panel-footer shadow-sm rounded-bottom">
-					<button class="btn btn-primary rounded-0 btn-bayar btn-lg rounded-bottom" disabled>Bayar Rp <span class="total-text">0</span></button>
+					<button class="btn btn-primary rounded-0 btn-bayar btn-lg rounded-bottom" disabled>Pesan Rp <span class="total-text">0</span></button>
 				</div>
 			</div>
 		</div>

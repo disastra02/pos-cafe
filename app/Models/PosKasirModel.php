@@ -18,6 +18,13 @@ class PosKasirModel extends \App\Models\BaseModel
 		return $result;
 	}
 
+	public function getMeja()
+	{
+		$sql = 'SELECT * FROM meja ORDER BY id_meja ASC';
+		$result = $this->db->query($sql)->getResultArray();
+		return $result;
+	}
+
 	public function getSettingKasir()
 	{
 		$sql = 'SELECT * FROM setting WHERE type="kasir"';

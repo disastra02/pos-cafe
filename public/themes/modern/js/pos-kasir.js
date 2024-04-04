@@ -838,11 +838,11 @@ $(document).ready(function()
 		$form.find('.jml-tagihan').val(format_ribuan(total_nilai));
 
 		$bootbox =  bootbox.dialog({
-			title: 'Bayar',
-			message: 'bayar',
+			title: 'Pesan',
+			message: 'pesan',
 			buttons: {
 				cancel: {
-					label: 'Close',
+					label: 'Kembali',
 					callback: function() {
 						if (setting_kasir.bersihkan_form == 'setelah_klik_close') 
 						{
@@ -851,7 +851,7 @@ $(document).ready(function()
 					}
 				},
 				success: {
-					label: 'Bayar',
+					label: 'Pesan',
 					className: 'btn-success submit',
 					callback: function() 
 					{
@@ -878,12 +878,13 @@ $(document).ready(function()
 							data: data,
 							method: 'post',
 							success: function(data) {
+								console.log(setting_kasir);
 								$spinner.remove();
 								$btn_all.prop('disabled', false);
 								data = JSON.parse(data);
 								if (data.status == 'ok') {
 									$btn_submit.prop('disabled', false);
-									if (setting_kasir.bersihkan_form == 'setelah_bayar') {
+									if (setting_kasir.bersihkan_form == 'setelah_bayar' || setting_kasir.bersihkan_form == 'setelah_cetak_invoice') {
 										// $bootbox.hide();
 										$bootbox.find('.bootbox-cancel').click();
 										$('.del-barang-pilih').trigger('click');

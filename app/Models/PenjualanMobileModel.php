@@ -476,4 +476,77 @@ class PenjualanMobileModel extends \App\Models\BaseModel
 
 		return ['data' => $data, 'total_filtered' => $total_filtered];
 	}
+
+	public function getListDataPenjualanDapur()
+	{
+
+		$columns = $this->request->getPost('columns');
+
+		// Search
+		$search_all = @$this->request->getPost('search')['value'];
+		$where = ' WHERE 1=1 ';
+		if ($search_all) {
+			foreach ($columns as $val) {
+
+				if (strpos($val['data'], 'ignore_search') !== false)
+					continue;
+
+				if (strpos($val['data'], 'ignore') !== false)
+					continue;
+
+				$where_col[] = $val['data'] . ' LIKE "%' . $search_all . '%"';
+			}
+			$where .= ' AND (' . join(' OR ', $where_col) . ') ';
+		}
+
+		// Query Total Filtered
+		$sql = 'SELECT COUNT(*) AS jml FROM penjualan 
+				LEFT JOIN customer USING(id_customer)
+				' . $where;
+		$data = $this->db->query($sql)->getRowArray();
+		$total_filtered = $data['jml'];
+
+		// Order
+		$order_data = $this->request->getPost('order');
+		$order = '';
+		if (strpos($_POST['columns'][$order_data[0]['column']]['data'], 'ignore_search') === false) {
+			$order_by = $columns[$order_data[0]['column']]['data'] . ' ' . strtoupper($order_data[0]['dir']);
+			$order = ' ORDER BY ' . $order_by;
+		}
+
+		$start = $this->request->getPost('start') ?: 0;
+		$length = $this->request->getPost('length') ?: 10;
+
+		// Query Data
+		$sql = 'SELECT * FROM penjualan 
+				LEFT JOIN customer USING(id_customer)
+				' . $where .' ORDER BY id_penjualan DESC LIMIT ' . $start . ', ' . $length;
+		$data = $this->db->query($sql)->getResultArray();
+
+		return ['data' => $data, 'total_filtered' => $total_filtered];
+	}
+
+	public function getJumlahBarang($id_penjualan, $status)
+	{
+		$query = $this->db->query('SELECT count(*) AS jml FROM penjualan_detail WHERE id_penjualan = '. $id_penjualan .' AND penjualan_detail.status = '. $status);
+		$data = $query->getRowArray();
+		$hasil = $data['jml'];
+
+		return $hasil;
+	}
+
+	public function saveUpdateStatus()
+	{
+		$query = $this->db->table('penjualan_detail')->where('id_penjualan_detail', $_POST['id'])->update(['status' => 1]);
+
+		if ($this->db->transStatus() === false) {
+			$result['status'] = 'error';
+			$result['message'] = 'Data gagal disimpan';
+		} else {
+			$result['status'] = 'ok';
+			$result['message'] = 'Data berhasil disimpan';
+		}
+
+		return $result;
+	}
 }

@@ -146,6 +146,16 @@ class Penjualan extends \App\Controllers\BaseController
 			echo view('themes/modern/penjualan-mobile-detail.php', $this->data);
 		}
 	}
+
+	// For mobile
+	public function detailDapur()
+	{
+		$detail_data = $this->detailData();
+		$this->data = array_merge($this->data, $detail_data);
+		if (@$_GET['mobile'] == 'true') {
+			echo view('themes/modern/dapur-penjualan-detail.php', $this->data);
+		}
+	}
 	//-- For mobile
 
 	public function edit()
