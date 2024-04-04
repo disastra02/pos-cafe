@@ -139,6 +139,9 @@ class Dapur_penjualan extends \App\Controllers\BaseController
 
 		$no = $this->request->getPost('start') + 1 ?: 1;
 		foreach ($query['data'] as $key => &$val) {
+			$status_transaksi_awal = '<span class="badge text-bg-warning">'.$this->model->getJumlahBarang($val['id_penjualan'], 100).' Pesanan</span> &nbsp; <span class="badge text-bg-success">'.$this->model->getJumlahBarang($val['id_penjualan'], 1).' Selesai</span>';
+			$status_transaksi = ($this->model->getJumlahBarang($val['id_penjualan'], 1) == $this->model->getJumlahBarang($val['id_penjualan'])) ? '<span class="badge text-bg-success">Selesai</span>' : $status_transaksi_awal;
+
 			$val['no_invoice'] = $val['no_invoice'] . '<span style="display:none" class="invoice-detail">' . json_encode($val) . '</span>';
 			$val['nama_customer'] = $val['nama_customer'] ?: '-';
 			$exp = explode(' ', $val['tgl_invoice']);
@@ -148,7 +151,7 @@ class Dapur_penjualan extends \App\Controllers\BaseController
 			$val['sub_total'] = '<div class="text-end">' . format_number($val['sub_total']) . '</div>';
 			$val['neto'] = '<div class="text-end">' . format_number($val['neto']) . '</div>';
 			$val['meja'] = '<div class="text-center">' . $val['id_meja'] . '</div>';
-			$val['status_pesanan'] = '<div class="text-end"><span class="badge text-bg-warning">'.$this->model->getJumlahBarang($val['id_penjualan'], 0).' Pesanan</span> &nbsp; <span class="badge text-bg-success">'.$this->model->getJumlahBarang($val['id_penjualan'], 1).' Selesai</span></div>';
+			$val['status_pesanan'] = '<div class="text-center">'.$status_transaksi.'</div>';
 			$val['total_diskon_item'] = '<div class="text-end">' . format_number($val['total_diskon_item']) . '</div>';
 			$val['kurang_bayar'] = '<div class="text-end">' . format_number($val['kurang_bayar']) . '</div>';
 

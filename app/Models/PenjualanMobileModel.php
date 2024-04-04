@@ -471,7 +471,7 @@ class PenjualanMobileModel extends \App\Models\BaseModel
 		// Query Data
 		$sql = 'SELECT * FROM penjualan 
 				LEFT JOIN customer USING(id_customer)
-				' . $where . $order . ' LIMIT ' . $start . ', ' . $length;
+				' . $where . 'ORDER BY id_penjualan DESC LIMIT ' . $start . ', ' . $length;
 		$data = $this->db->query($sql)->getResultArray();
 
 		return ['data' => $data, 'total_filtered' => $total_filtered];
@@ -526,9 +526,15 @@ class PenjualanMobileModel extends \App\Models\BaseModel
 		return ['data' => $data, 'total_filtered' => $total_filtered];
 	}
 
-	public function getJumlahBarang($id_penjualan, $status)
+	public function getJumlahBarang($id_penjualan, $status = null)
 	{
-		$query = $this->db->query('SELECT count(*) AS jml FROM penjualan_detail WHERE id_penjualan = '. $id_penjualan .' AND penjualan_detail.status = '. $status);
+		if ($status) {
+			$status = $status == 100 ? 0 : $status;
+
+			$query = $this->db->query('SELECT count(*) AS jml FROM penjualan_detail WHERE id_penjualan = '. $id_penjualan .' AND penjualan_detail.status = '. $status);
+		} else {
+			$query = $this->db->query('SELECT count(*) AS jml FROM penjualan_detail WHERE id_penjualan = '. $id_penjualan);
+		}
 		$data = $query->getRowArray();
 		$hasil = $data['jml'];
 
@@ -537,7 +543,35 @@ class PenjualanMobileModel extends \App\Models\BaseModel
 
 	public function saveUpdateStatus()
 	{
-		$query = $this->db->table('penjualan_detail')->where('id_penjualan_detail', $_POST['id'])->update(['status' => 1]);
+		$query_penjualan = $this->db->table('penjualan')->where('id_penjualan', $_POST['id'])->update(['status_transaksi' => 1]);
+		$query_detail = $this->db->table('penjualan_detail')->where('id_penjualan_detail', $_POST['id'])->update(['status' => 1]);
+
+		if ($this->db->transStatus() === false) {
+			$result['status'] = 'error';
+			$result['message'] = 'Data gagal disimpan';
+		} else {
+			$result['status'] = 'ok';
+			$result['message'] = 'Data berhasil disimpan';
+		}
+
+		return $result;
+	}
+
+	public function saveUpdateTransaksi()
+	{
+		$query = $this->db->query('SELECT count(*) AS jml FROM penjualan_detail WHERE id_penjualan = '. $_POST['id'] .' AND penjualan_detail.status = 0');
+		$data = $query->getRowArray();
+		$hasil = $data['jml'];
+
+		if ($hasil > 0) {
+			$result['status'] = 'warning';
+			$result['message'] = 'Data harus selesai semua';
+
+			return $result;
+		}
+
+		$query_penjualan = $this->db->table('penjualan')->where('id_penjualan', $_POST['id'])->update(['status_transaksi' => 2]);
+		$query_detail = $this->db->table('penjualan_detail')->where('id_penjualan', $_POST['id'])->update(['status' => 2]);
 
 		if ($this->db->transStatus() === false) {
 			$result['status'] = 'error';

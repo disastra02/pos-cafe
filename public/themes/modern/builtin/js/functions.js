@@ -156,7 +156,7 @@ function show_toast(message, type = null) {
 	if (!type) 
 		type = 'success';
 	
-	background = type = 'success' ? 'bg-success' : 'bg-danger';
+	background = type == 'success' ? 'bg-success' : 'bg-danger';
 	const Toast = Swal.mixin({
 				toast: true,
 				position: 'top-end',

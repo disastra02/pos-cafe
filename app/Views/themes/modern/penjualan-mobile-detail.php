@@ -33,6 +33,18 @@
 							<div>
 								<span style="font-weight:bold;font-size:105%"><span>Rp. </span><span class="harga-satuan-text"><?=format_number($val['harga_satuan'])?></span></span>
 							</div>
+							<?php
+							if($val['status'] == 1) { 
+							?>
+								<span class="badge text-bg-primary">Siap Dikirim</span>
+							<?php 
+							} else {
+							?>
+								<span class="badge text-bg-warning">Diproses</span>
+							<?php 
+							}
+							?>
+							
 						</div>
 					</div>
 				</td>

@@ -139,6 +139,10 @@ class Penjualan_mobile extends \App\Controllers\BaseController
 
 		$no = $this->request->getPost('start') + 1 ?: 1;
 		foreach ($query['data'] as $key => &$val) {
+			$status_transaksi_awal = '<span class="badge text-bg-primary">'.$this->model->getJumlahBarang($val['id_penjualan'], 1).' Siap Dikirim</span> &nbsp; <span class="badge text-bg-warning">'.$this->model->getJumlahBarang($val['id_penjualan'], 100).' Diproses</span>';
+			$status_transaksi = ($this->model->getJumlahBarang($val['id_penjualan'], 2) == $this->model->getJumlahBarang($val['id_penjualan'])) ? '<span class="badge text-bg-success">Selesai</span>' : $status_transaksi_awal;
+
+
 			$val['no_invoice'] = $val['no_invoice'] . '<span style="display:none" class="invoice-detail">' . json_encode($val) . '</span>';
 			$val['nama_customer'] = $val['nama_customer'] ?: '-';
 			$exp = explode(' ', $val['tgl_invoice']);
@@ -147,6 +151,7 @@ class Penjualan_mobile extends \App\Controllers\BaseController
 			$val['tgl_invoice'] = '<div class="text-end text-nowrap">' . $split[2] . '-' . $split[1] . '-' . $split[0] . '</div>';
 			$val['sub_total'] = '<div class="text-end">' . format_number($val['sub_total']) . '</div>';
 			$val['neto'] = '<div class="text-end">' . format_number($val['neto']) . '</div>';
+			$val['status_transaksi'] = '<div class="text-center">' . $status_transaksi . '</div>';
 			$val['total_diskon_item'] = '<div class="text-end">' . format_number($val['total_diskon_item']) . '</div>';
 			$val['kurang_bayar'] = '<div class="text-end">' . format_number($val['kurang_bayar']) . '</div>';
 
@@ -177,5 +182,12 @@ class Penjualan_mobile extends \App\Controllers\BaseController
 		$result['data'] = $query['data'];
 		echo json_encode($result);
 		exit();
+	}
+
+	public function ajaxSaveUpdateTransaksi()
+	{
+		$model = new \App\Models\PenjualanMobileModel;
+		$result = $model->saveUpdateTransaksi();
+		echo json_encode($result);
 	}
 }

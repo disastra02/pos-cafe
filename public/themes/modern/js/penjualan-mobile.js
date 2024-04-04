@@ -18,7 +18,6 @@ function show_detail_penjualan (detail)
 	// $link.removeClass('link-spa');
 	
 	$.get(base_url + 'penjualan/detail?mobile=true&id=' + detail['id_penjualan'], function (data) {
-		console.log('oke');
 		$container.append(data);
 		$spinner.remove();
 		$footer_right = $('.right-panel-footer');
@@ -37,6 +36,12 @@ function show_detail_penjualan (detail)
 		
 		$link.prop('disabled', false);
 		$link.removeClass('disabled').attr('href', base_url + 'penjualan-mobile/edit?id=' + detail['id_penjualan']);
+
+		if (detail.status_transaksi == 2) {
+			$('.btn-aksi-selesai').css('display', 'none');
+		} else {
+			$('.btn-aksi-selesai').css('display', 'block');
+		}
 		
 		if (osRightPanel) {
 			osRightPanel.destroy();
@@ -143,6 +148,53 @@ $(document).ready(function() {
 			window.open(url, top = 500, left = 500, width = 600, height = 600, menubar = 'no', status = 'no', titlebar = 'no'); 
 		}
 		return false;
+	});
+
+	$(document).undelegate('.btn-aksi-selesai', 'click').delegate('.btn-aksi-selesai', 'click', function() 
+	{
+		$this = $(this);
+		let id = $(this).data('id');
+
+		$spinner = $('<div class="spinner-border spinner-border-sm me-2"></div>');
+		$this.prepend($spinner);
+		
+		Swal.fire({
+			title: "Apakah anda yakin?",
+			text: "Pesanan telah selesai dikirim!",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Selesai",
+			cancelButtonText: "Batal"
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.ajax({
+					url: base_url + 'penjualan-mobile/ajaxSaveUpdateTransaksi',
+					data: {id:id},
+					method: 'post',
+					success: function(data) {
+						$spinner.remove();
+						data = JSON.parse(data);
+						if (data.status == 'ok') {
+							show_toast('Data berhasil diperbarui');
+							dataTables.draw();
+							show_detail_penjualan(detail);
+							return;
+						} 
+
+						if (data.status == 'warning') {
+							show_toast('Data masih diproses', 'error');
+							return;
+						} 
+						
+					}, error: function(xhr) {
+						$spinner.remove();
+						console.log(xhr);
+					}
+				})
+			}
+		});
 	});
 	
 	$(document).undelegate('.btn-print-invoice', 'click').delegate('.btn-print-invoice', 'click', function(e) {
@@ -399,7 +451,6 @@ $(document).ready(function() {
 		
 		show_detail_penjualan(detail);
 	})
-	
 	
 	$(document).undelegate('.link-edit', 'click').delegate('.link-edit', 'click', function(e) {
 		

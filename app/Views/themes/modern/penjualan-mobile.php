@@ -9,6 +9,7 @@
 					, 'no_invoice' => 'No. Invoice'
 					, 'tgl_invoice' => 'Tanggal'
 					, 'neto' => 'Total'
+					, 'status_transaksi' => 'Status'
 				];
 		
 		$settings['order'] = [2,'desc'];
@@ -32,6 +33,7 @@
 					<th scope="col">No. Invoice</th>
 					<th scope="col">Tanggal</th>
 					<th scope="col">Total</th>
+					<th scope="col">Status</th>
 				</tr>
 			</thead>
 		</table>
@@ -90,10 +92,11 @@
 					<?php
 					}
 					?>
-					<button class="btn-print-nota btn btn-success me-1" disabled><i class="fas fa-print me-2"></i>Nota</button>
+					<button class="btn-print-nota btn btn-secondary me-1" disabled><i class="fas fa-print me-2"></i>Nota</button>
 					<button class="btn-print-invoice btn btn-warning me-1" disabled><i class="fas fa-print me-2"></i>Invoice</button>
 					<button class="btn-download-invoice-pdf btn btn-danger me-1" disabled><i class="fas fa-file-pdf me-2"></i>PDF</button>
-					<button class="btn-kirim-email-invoice btn btn-primary me-1" disabled><i class="fas fa-paper-plane me-2"></i>Email</button>
+					<button class="btn-aksi-selesai btn btn-success me-1" disabled style="display: none;"><i class="fas fa-check me-2"></i>Selesai</button>
+					<button class="btn-kirim-email-invoice btn btn-primary me-1" disabled style="display: none;"><i class="fas fa-paper-plane me-2"></i>Email</button>
 				</div>
 			</div>
 		</div>

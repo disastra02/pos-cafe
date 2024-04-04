@@ -137,7 +137,7 @@
 				<?php
 				} ?>
 				<?php
-				if (has_permission('', 'penjualan-mobile')) {
+				if (has_permission('create', 'penjualan-mobile')) {
 				?>
 					<li class="nav-item bg-warning">
 						<a href="<?= base_url() ?>/penjualan-mobile" id="menu-invoice" class="nav-link <?= $active_penjualan ?> link-spa"><i class="fas fa-receipt"></i><span class="hide-mobile ms-2">Invoice</span></a>

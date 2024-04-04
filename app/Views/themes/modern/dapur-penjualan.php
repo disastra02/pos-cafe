@@ -94,7 +94,7 @@
 					<?php
 					}
 					?>
-					<button class="btn-print-nota btn btn-success me-1" disabled><i class="fas fa-print me-2"></i>Nota</button>
+					<button class="btn-print-nota btn btn-secondary me-1" disabled><i class="fas fa-print me-2"></i>Nota</button>
 					<button class="btn-print-invoice btn btn-warning me-1" disabled><i class="fas fa-print me-2"></i>Invoice</button>
 					<button class="btn-download-invoice-pdf btn btn-danger me-1" disabled><i class="fas fa-file-pdf me-2"></i>PDF</button>
 					<button class="btn-kirim-email-invoice btn btn-primary me-1" disabled><i class="fas fa-paper-plane me-2"></i>Email</button>

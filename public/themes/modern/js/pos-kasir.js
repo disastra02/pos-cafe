@@ -855,6 +855,16 @@ $(document).ready(function()
 					className: 'btn-success submit',
 					callback: function() 
 					{
+						console.log($('#name_customer').val())
+						if (!$('#nomor_meja').val()) {
+							show_toast('Silahkan pilih nomor meja terlebih dahulu', 'error');
+							return;
+						} 
+						
+						if (!$('#name_customer').val() && !$('#name_customer').val() == '') {
+							show_toast('Silahkan masukkan customer terlebih dahulu', 'error');
+							return;
+						}
 					
 						$form_list_barang = $('#barang-pilih-form');
 						// $form_list_barang.find('.form-bayar-inserted').remove();
