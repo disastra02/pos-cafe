@@ -11,7 +11,7 @@ namespace App\Controllers;
 
 use App\Models\PenjualanMobileModel;
 
-class Dapur_penjualan extends \App\Controllers\BaseController
+class Kasir_penjualan extends \App\Controllers\BaseController
 {
 	public function __construct()
 	{
@@ -33,8 +33,8 @@ class Dapur_penjualan extends \App\Controllers\BaseController
 
 		$this->addJs($this->config->baseURL . 'public/themes/modern/js/pos-kasir.js');
 
-		$this->addStyle($this->config->baseURL . 'public/themes/modern/css/dapur-penjualan.css');
-		$this->addJs($this->config->baseURL . 'public/themes/modern/js/dapur-penjualan.js');
+		$this->addStyle($this->config->baseURL . 'public/themes/modern/css/kasir-penjualan.css');
+		$this->addJs($this->config->baseURL . 'public/themes/modern/js/kasir-penjualan.js');
 
 
 
@@ -69,7 +69,7 @@ class Dapur_penjualan extends \App\Controllers\BaseController
 		$this->data['jenis_harga'] = $jenis_harga;
 		$this->data['jenis_harga_selected'] = $jenis_harga_selected;
 
-		return view('themes/modern/dapur-penjualan', $this->data);
+		return view('themes/modern/kasir-penjualan', $this->data);
 		// echo view('themes/modern/dapur-penjualan.php', $this->data);
 	}
 
@@ -97,18 +97,18 @@ class Dapur_penjualan extends \App\Controllers\BaseController
 	{
 		$this->hasPermission('update_all');
 
-		$this->addJs($this->config->baseURL . 'public/themes/modern/js/dapur-penjualan-edit.js');
-		$this->addJs($this->config->baseURL . 'public/themes/modern/js/dapur-penjualan.js');
+		$this->addJs($this->config->baseURL . 'public/themes/modern/js/kasir-penjualan-edit.js');
+		$this->addJs($this->config->baseURL . 'public/themes/modern/js/kasir-penjualan.js');
 
 		$this->data['loading_data'] = true;
 		$this->data['action'] = 'edit';
 		$this->data['penjualan_detail'] = $this->model->getPenjualanById($_GET['id']);
-		return view('themes/modern/dapur-penjualan', $this->data);
+		return view('themes/modern/kasir-penjualan', $this->data);
 	}
 
 	public function detail()
 	{
-		$this->addJs($this->config->baseURL . 'public/themes/modern/js/dapur-penjualan-detail.js');
+		$this->addJs($this->config->baseURL . 'public/themes/modern/js/kasir-penjualan-detail.js');
 
 		$result = $this->model->getSettingPajak();
 		foreach ($result as $val) {
@@ -118,7 +118,7 @@ class Dapur_penjualan extends \App\Controllers\BaseController
 
 		$this->data['loading_data'] = true;
 		$this->data['penjualan_detail'] = $this->model->getPenjualanById($_GET['id']);
-		return view('themes/modern/dapur-penjualan', $this->data);
+		return view('themes/modern/kasir-penjualan', $this->data);
 	}
 
 	// Penjualan
@@ -139,8 +139,9 @@ class Dapur_penjualan extends \App\Controllers\BaseController
 
 		$no = $this->request->getPost('start') + 1 ?: 1;
 		foreach ($query['data'] as $key => &$val) {
-			$status_transaksi_awal = '<span class="badge text-bg-warning">'.$this->model->getJumlahBarang($val['id_penjualan'], 100).' Pesanan</span> &nbsp; <span class="badge text-bg-success">'.$this->model->getJumlahBarang($val['id_penjualan'], 1).' Selesai</span>';
-			$status_transaksi = ($this->model->getJumlahBarang($val['id_penjualan'], 1) == $this->model->getJumlahBarang($val['id_penjualan']) || $this->model->getJumlahBarang($val['id_penjualan'], 2) == $this->model->getJumlahBarang($val['id_penjualan'])) ? '<span class="badge text-bg-success">Selesai</span>' : $status_transaksi_awal;
+			// $status_transaksi_awal = '<span class="badge text-bg-warning">'.$this->model->getJumlahBarang($val['id_penjualan'], 100).' Pesanan</span> &nbsp; <span class="badge text-bg-success">'.$this->model->getJumlahBarang($val['id_penjualan'], 1).' Selesai</span>';
+			// $status_transaksi = ($this->model->getJumlahBarang($val['id_penjualan'], 1) == $this->model->getJumlahBarang($val['id_penjualan']) || $this->model->getJumlahBarang($val['id_penjualan'], 2) == $this->model->getJumlahBarang($val['id_penjualan'])) ? '<span class="badge text-bg-success">Selesai</span>' : $status_transaksi_awal;
+			$status_transaksi = ($val['status_transaksi'] == 3) ? '<span class="badge text-bg-success">Selesai</span>' : '<span class="badge text-bg-warning">Belum Bayar</span>';
 
 			$val['no_invoice'] = $val['no_invoice'] . '<span style="display:none" class="invoice-detail">' . json_encode($val) . '</span>';
 			$val['nama_customer'] = $val['nama_customer'] ?: '-';
@@ -188,6 +189,13 @@ class Dapur_penjualan extends \App\Controllers\BaseController
 	{
 		$model = new \App\Models\PenjualanMobileModel;
 		$result = $model->saveUpdateStatus();
+		echo json_encode($result);
+	}
+
+	public function ajaxSaveData()
+	{
+		$model = new \App\Models\PenjualanModel;
+		$result = $model->saveData();
 		echo json_encode($result);
 	}
 }

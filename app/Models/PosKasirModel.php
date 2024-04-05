@@ -20,7 +20,7 @@ class PosKasirModel extends \App\Models\BaseModel
 
 	public function getMeja()
 	{
-		$sql = 'SELECT * FROM meja ORDER BY id_meja ASC';
+		$sql = 'SELECT * FROM meja WHERE meja.status IS NULL ORDER BY id_meja ASC';
 		$result = $this->db->query($sql)->getResultArray();
 		return $result;
 	}

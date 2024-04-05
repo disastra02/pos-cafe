@@ -303,6 +303,7 @@
 						<!-- Input Hidden -->
 						<input type="hidden" name="jenis_bayar" value="pending">
 						<input type="hidden" name="jml_bayar[]" value="0">
+						<input type="hidden" name="tgl_bayar[]" value="<?= date('d-m-Y') ?>" />
 						<!-- End Input Hidden -->
 
 						<div class="form-group row mb-3">

@@ -111,6 +111,7 @@
 		$active_kasir = strpos($nama_module, 'kasir') !== false ? 'active' : '';
 		$active_penjualan = strpos($nama_module, 'penjualan-mobile') !== false ? 'active' : '';
 		$active_dapur_penjualan = strpos($nama_module, 'dapur-penjualan') !== false ? 'active' : '';
+		$active_kasir_penjualan = strpos($nama_module, 'kasir-penjualan') !== false ? 'active' : '';
 		$active_barang = strpos($nama_module, 'barang-mobile') !== false ? 'active' : '';
 		?>
 		<nav class="navbar navbar-dark navbar-footer navbar-expand fixed-bottom">
@@ -133,6 +134,14 @@
 				?>
 					<li class="nav-item bg-warning">
 						<a href="<?= base_url() ?>/dapur-penjualan" id="menu-invoice" class="nav-link <?= $active_dapur_penjualan ?> link-spa"><i class="fas fa-receipt"></i><span class="hide-mobile ms-2">Invoice</span></a>
+					</li>
+				<?php
+				} ?>
+				<?php
+				if (has_permission('create', 'kasir-penjualan')) {
+				?>
+					<li class="nav-item bg-warning">
+						<a href="<?= base_url() ?>/kasir-penjualan" id="menu-invoice" class="nav-link <?= $active_kasir_penjualan ?> link-spa"><i class="fas fa-receipt"></i><span class="hide-mobile ms-2">Invoice</span></a>
 					</li>
 				<?php
 				} ?>

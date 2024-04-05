@@ -9,7 +9,8 @@
 					, 'no_invoice' => 'No. Invoice'
 					, 'tgl_invoice' => 'Tanggal'
 					, 'neto' => 'Total'
-					, 'status_transaksi' => 'Status'
+					, 'status_pesanan' => 'Pesanan'
+					, 'meja' => 'Meja'
 				];
 		
 		$settings['order'] = [2,'desc'];
@@ -33,7 +34,8 @@
 					<th scope="col">No. Invoice</th>
 					<th scope="col">Tanggal</th>
 					<th scope="col">Total</th>
-					<th scope="col">Status</th>
+					<th scope="col">Pesanan</th>
+					<th scope="col">Meja</th>
 				</tr>
 			</thead>
 		</table>
@@ -81,22 +83,21 @@
 					$display_detail = $action == 'edit' ? 'style="display:none"' : '';
 				?>
 				<div class="btn-save btn-container" <?=$display_edit?>>
-					<button class="btn-cancel btn btn-secondary me-1" disabled><i class="fas fa-save me-2"></i>Cancel</button>
+					<button class="btn-cancel btn btn-secondary me-1" disabled><i class="fas fa-times me-2"></i>Cancel</button>
 					<button class="btn-submit btn btn-primary me-1" disabled><i class="fas fa-save me-2"></i>Simpan</button>
 					<span style="display:none" class="invoice-detail"><?=json_encode($penjualan_detail)?></span>
 				</div>
 				<div class="btn-detail btn-container" <?=$display_detail?>>
 					<?php
-					if (has_permission('update_all', 'penjualan-mobile')) { ?>
-						<!-- <a href="#" class="link-edit btn btn-info me-1 disabled" disabled><i class="fas fa-edit me-2"></i>Edit</a> -->
+					if (has_permission('update_all', 'kasir-penjualan')) { ?>
+						<a href="#" class="link-edit btn btn-success me-1 disabled" disabled><i class="fas fa-money-bill me-2"></i>Bayar</a>
 					<?php
 					}
 					?>
 					<button class="btn-print-nota btn btn-secondary me-1" disabled><i class="fas fa-print me-2"></i>Nota</button>
 					<button class="btn-print-invoice btn btn-warning me-1" disabled><i class="fas fa-print me-2"></i>Invoice</button>
 					<button class="btn-download-invoice-pdf btn btn-danger me-1" disabled><i class="fas fa-file-pdf me-2"></i>PDF</button>
-					<button class="btn-aksi-selesai btn btn-success me-1" disabled style="display: none;"><i class="fas fa-check me-2"></i>Selesai</button>
-					<button class="btn-kirim-email-invoice btn btn-primary me-1" disabled style="display: none;"><i class="fas fa-paper-plane me-2"></i>Email</button>
+					<button class="btn-kirim-email-invoice btn btn-primary me-1" disabled><i class="fas fa-paper-plane me-2"></i>Email</button>
 				</div>
 			</div>
 		</div>

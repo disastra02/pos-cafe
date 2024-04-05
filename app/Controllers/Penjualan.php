@@ -156,6 +156,16 @@ class Penjualan extends \App\Controllers\BaseController
 			echo view('themes/modern/dapur-penjualan-detail.php', $this->data);
 		}
 	}
+
+	// For mobile
+	public function detailKasir()
+	{
+		$detail_data = $this->detailData();
+		$this->data = array_merge($this->data, $detail_data);
+		if (@$_GET['mobile'] == 'true') {
+			echo view('themes/modern/kasir-penjualan-detail.php', $this->data);
+		}
+	}
 	//-- For mobile
 
 	public function edit()
@@ -173,6 +183,28 @@ class Penjualan extends \App\Controllers\BaseController
 
 		if (@$_GET['mobile'] == 'true') {
 			echo view('themes/modern/penjualan-form-mobile.php', $this->data);
+		} else {
+			$this->view('penjualan-form.php', $this->data);
+		}
+	}
+
+	public function editKasirPenjualan()
+	{
+		$this->hasPermission('update_all');
+
+		$this->data['title'] = 'Edit Penjualan';
+		$detail_data = $this->detailData();
+		$this->data = array_merge($this->data, $detail_data);
+
+		if (empty($_GET['id'])) {
+			$this->errorDataNotFound();
+		}
+		$this->data['breadcrumb']['Edit'] = '';
+
+		// print_r($detail_data);
+		// die();
+		if (@$_GET['mobile'] == 'true') {
+			echo view('themes/modern/kasir-form-mobile.php', $this->data);
 		} else {
 			$this->view('penjualan-form.php', $this->data);
 		}

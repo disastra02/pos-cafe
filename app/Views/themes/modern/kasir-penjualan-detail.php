@@ -1,6 +1,6 @@
 <div class="row mb-3">
 	<label class="col-sm-4">Nama Pelanggan</label>
-	<div class="col-sm-8"><?=$penjualan['nama_customer']?></div>
+	<div class="col-sm-8"><?=$penjualan['customer_nama']?></div>
 </div>
 <div class="row mb-3">
 	<label class="col-sm-4">No. Invoice</label>
@@ -33,18 +33,6 @@
 							<div>
 								<span style="font-weight:bold;font-size:105%"><span>Rp. </span><span class="harga-satuan-text"><?=format_number($val['harga_satuan'])?></span></span>
 							</div>
-							<?php
-							if($val['status'] == 1 || $val['status'] == 2) { 
-							?>
-								<span class="badge text-bg-primary"><?= $val['status'] == 1 ? 'Siap Dikirim' : 'Dikirim' ?></span>
-							<?php 
-							} else {
-							?>
-								<span class="badge text-bg-warning">Diproses</span>
-							<?php 
-							}
-							?>
-							
 						</div>
 					</div>
 				</td>
