@@ -118,7 +118,7 @@ $(document).ready(function() {
 	
 	$(document).undelegate('.btn-print-nota', 'click').delegate('.btn-print-nota', 'click', function(e) {
 		e.preventDefault();
-		url = base_url + 'penjualan/printNota?id=' + $(this).attr('data-id');
+		url = base_url + 'penjualan/printNotaDapur?id=' + $(this).attr('data-id') + '&penjualan=' + $(this).attr('data-penjualan');
 		is_mobile = /android|mobile/ig.test(navigator.userAgent);
 		if (is_mobile) {
 			const $this = $(this);

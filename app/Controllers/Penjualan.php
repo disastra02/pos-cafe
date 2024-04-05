@@ -683,6 +683,20 @@ class Penjualan extends \App\Controllers\BaseController
 		echo view('themes/modern/penjualan-print-nota.php', $this->data);
 	}
 
+	public function printNotaDapur()
+	{
+		$this->data['identitas'] = $this->model->getIdentitas();
+		$setting = $this->getSetting('invoice');
+
+		$this->data['setting'] = $setting;
+		$this->data['penjualan'] = $this->model->getPenjualanById($_GET['penjualan']);
+		$this->data['barang'] = $this->model->getPenjualanBarangByIdPenjualanDetail($_GET['id']);
+		$this->data['pembayaran'] = $this->model->getPembayaranByIdPenjualan($_GET['id']);
+		$this->data['petugas'] = $this->model->getUserById($this->data['penjualan']['id_user_input']);
+		$this->data['data'] = 'Data penjualan';
+		echo view('themes/modern/dapur-print-nota.php', $this->data);
+	}
+
 	public function getDataDTListBarang()
 	{
 		echo view('themes/modern/penjualan-list-barang.php', $this->data);

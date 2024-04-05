@@ -349,6 +349,7 @@ $(document).ready(function() {
 					dataTables.draw();
 					url_detail = base_url + 'kasir-penjualan/detail?id=' + detail['id_penjualan'];
 					history.pushState( url_detail,'',url_detail);
+					detail.status_transaksi = 3;
 					show_detail_penjualan(detail);
 				} else {
 					bootbox.alert('<div class="d-flex my-2"><span class="text-danger"><i class="fas fa-times-circle me-3" style="font-size:20px"></i></span>' + parse_message(data.message) + '</div>');

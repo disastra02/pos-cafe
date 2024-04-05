@@ -37,7 +37,7 @@ function show_detail_penjualan (detail)
 		$link.prop('disabled', false);
 		$link.removeClass('disabled').attr('href', base_url + 'penjualan-mobile/edit?id=' + detail['id_penjualan']);
 
-		if (detail.status_transaksi == 2) {
+		if (detail.status_transaksi == 2 || detail.status_transaksi == 3) {
 			$('.btn-aksi-selesai').css('display', 'none');
 		} else {
 			$('.btn-aksi-selesai').css('display', 'block');
@@ -179,6 +179,7 @@ $(document).ready(function() {
 						if (data.status == 'ok') {
 							show_toast('Data berhasil diperbarui');
 							dataTables.draw();
+							detail.status_transaksi = 2;
 							show_detail_penjualan(detail);
 							return;
 						} 

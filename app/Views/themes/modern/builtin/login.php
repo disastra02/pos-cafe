@@ -49,7 +49,7 @@
 		</div>
 	</form>
 	<!-- Tambahkan informasi user dan password di bawah tombol submit -->
-		<div class="mt-3">
+		<div class="mt-3 d-none">
 			<p>Informasi Login:</p>
 			<table class="table table-bordered">
 				<thead>

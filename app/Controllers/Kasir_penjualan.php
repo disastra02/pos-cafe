@@ -151,8 +151,8 @@ class Kasir_penjualan extends \App\Controllers\BaseController
 			$val['tgl_invoice'] = '<div class="text-end text-nowrap">' . $split[2] . '-' . $split[1] . '-' . $split[0] . '</div>';
 			$val['sub_total'] = '<div class="text-end">' . format_number($val['sub_total']) . '</div>';
 			$val['neto'] = '<div class="text-end">' . format_number($val['neto']) . '</div>';
-			$val['meja'] = '<div class="text-center">' . $val['id_meja'] . '</div>';
-			$val['status_pesanan'] = '<div class="text-center">'.$status_transaksi.'</div>';
+			$val['id_meja'] = '<div class="text-center">' . $val['id_meja'] . '</div>';
+			$val['ignore_status_pesanan'] = '<div class="text-center">'.$status_transaksi.'</div>';
 			$val['total_diskon_item'] = '<div class="text-end">' . format_number($val['total_diskon_item']) . '</div>';
 			$val['kurang_bayar'] = '<div class="text-end">' . format_number($val['kurang_bayar']) . '</div>';
 

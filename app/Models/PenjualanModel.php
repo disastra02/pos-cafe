@@ -149,6 +149,50 @@ class PenjualanModel extends \App\Models\BaseModel
 		return $data;
 	}
 
+	public function getPenjualanBarangByIdPenjualanDetail($id)
+	{
+		$sql = 'SELECT *
+				FROM penjualan_detail 
+				LEFT JOIN barang USING(id_barang)
+				WHERE id_penjualan_detail = ?';
+
+		$result = $this->db->query($sql, $id)->getResultArray();
+
+		$data = [];
+		foreach ($result as $val) {
+			$data[$val['id_barang']] = $val;
+		}
+
+		// List stok
+		$id_barang = [];
+		foreach ($data as $val) {
+			$id_barang[] = $val['id_barang'];
+		}
+
+		$list_stok = $this->getListStokByIdBarang($id_barang);
+		$list_harga = $this->getListHargaBarang($id_barang);
+
+		// Merge
+		foreach ($data as &$val) {
+			if (key_exists($val['id_barang'], $list_stok)) {
+				$val['list_stok'] = $list_stok[$val['id_barang']];
+			} else {
+				$val['list_stok'][$val['id_barang']] = 0;
+			}
+
+			if (key_exists($val['id_barang'], $list_harga)) {
+				$val['list_harga'] = $list_harga[$val['id_barang']];
+			} else {
+				$val['list_harga'] = 0;
+			}
+
+			// $val['list_stok'] = $list_stok[$val['id_barang']];
+			// $val['list_harga'] = $list_harga[$val['id_barang']];
+		}
+
+		return $data;
+	}
+
 	public function getPembayaranByIdPenjualan($id)
 	{
 		$sql = 'SELECT *

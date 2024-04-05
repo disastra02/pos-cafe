@@ -52,6 +52,9 @@
 				<td class="text-end fw-bold" style="font-size:105%">
 					<span class="harga-barang-text number-display"><?=format_number($val['harga_total'])?></span>
 				</td>
+				<td>
+					<button class="btn-print-nota btn btn-secondary me-1 ms-3" data-id="<?= $val['id_penjualan_detail']?>" data-penjualan="<?=$penjualan['id_penjualan']?>" title="Print Nota"><i class="fas fa-print me-3"></i></button>
+				</td>
 			</tr>
 			<?php
 			$display = $val['diskon_nilai'] ? '' : ' style="display:none"';
@@ -64,7 +67,7 @@
 				$diskon_text =  $val['diskon_nilai'] * -1;
 			}
 			?>
-			<tr class="diskon-row" <?=$display?>>
+			<!-- <tr class="diskon-row" <?=$display?>>
 				<td colspan="2">
 					<div class="d-flex diskon-barang-row" style="justify-content: space-between;">
 						<div>Diskon</div>
@@ -74,7 +77,7 @@
 				<td class="text-end">
 					<span class="diskon-barang-text number-display"><?=format_number($val['diskon_nilai']) . $persen?></span>
 				</td>
-			</tr>
+			</tr> -->
 		</tbody>
 	<?php
 	}
