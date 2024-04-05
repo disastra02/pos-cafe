@@ -7,7 +7,24 @@ if (!$penjualan) {
 $display = $penjualan['id_customer'] ? '' : ' style="display:none"';
 ?>
 <form method="post" action="" class="form-horizontal" enctype="multipart/form-data">
+	<!-- Hidden Input -->
+	<input type="hidden" name="nomor_meja" value="<?=set_value('id_meja', @$penjualan['id_meja'])?>">
+	<input type="hidden" name="name_customer" value="<?=set_value('customer_nama', @$penjualan['customer_nama'])?>">
+
 	<div class="row mb-3">
+	<label class="col-sm-4">Nama Pelanggan</label>
+		<div class="col-sm-8"><?=set_value('customer_nama', @$penjualan['customer_nama'])?></div>
+	</div>
+	<div class="row mb-3">
+		<label class="col-sm-4">No. Invoice</label>
+		<div class="col-sm-8"><?=set_value('no_invoice', @$penjualan['no_invoice'])?></div>
+	</div>
+	<div class="row mb-3">
+		<label class="col-sm-4">Tanggal</label>
+		<div class="col-sm-8"><?=set_value('tgl_invoice', format_tanggal(@$penjualan['tgl_invoice'], 'dd-mm-yyyy'))?></div>
+	</div>
+
+	<div class="row mb-3 d-none">
 		<label class="col-sm-4">Nama Pelanggan</label>
 		<div class="col-sm-8">
 			<div class="input-group">
@@ -18,14 +35,14 @@ $display = $penjualan['id_customer'] ? '' : ' style="display:none"';
 			<input class="form-control" type="hidden" name="id_customer" id="id-customer" value="<?=set_value('id_customer', @$penjualan['id_customer'])?>" required="required"/>
 		</div>
 	</div>
-	<div class="row mb-3">
+	<div class="row mb-3 d-none">
 		<label class="col-sm-4">No. Invoice</label>
 		<div class="col-sm-8">
 			<input class="form-control" type="text" name="no_invoice" id="no-invoice" value="<?=set_value('no_invoice', @$penjualan['no_invoice'])?>" readonly="readonly"/>
 			<small class="text-muted">Digenerate otomatis oleh sistem</small>
 		</div>
 	</div>
-	<div class="row mb-3">
+	<div class="row mb-3 d-none">
 		<label class="col-sm-4">Tanggal</label>
 		<div class="col-sm-8">
 			<input class="form-control flatpickr tanggal-invoice flatpickr" type="text" name="tgl_invoice" value="<?=set_value('tgl_invoice', format_tanggal(@$penjualan['tgl_invoice'], 'dd-mm-yyyy'))?>" required="required"/>
@@ -262,7 +279,7 @@ $display = $penjualan['id_customer'] ? '' : ' style="display:none"';
 				<td></td>
 			</tr>
 		</tbody>
-		<tbody class="form-bayar">
+		<tbody class="form-bayar d-none">
 			<tr>
 				<td colspan="4"><hr/></td>
 			</tr>
@@ -270,7 +287,8 @@ $display = $penjualan['id_customer'] ? '' : ' style="display:none"';
 				<td><div class="d-flex justify-content-between">Bayar</div></td>
 				<td></td>
 				<td>
-					<?=options(['name' => 'jenis_bayar', 'style' => 'width:auto'], ['tunai' => 'Tunai', 'transfer' => 'Transfer', 'tempo' => 'Tempo'], $penjualan['jenis_bayar'])?>
+					<input type="hidden" name="jenis_bayar" value="pending">
+					<!-- <?=options(['name' => 'jenis_bayar', 'style' => 'width:auto'], ['tunai' => 'Tunai', 'transfer' => 'Transfer', 'tempo' => 'Tempo'], $penjualan['jenis_bayar'])?> -->
 				</td>
 				<td></td>
 			</tr>

@@ -37,10 +37,14 @@ function show_detail_penjualan (detail)
 		$link.prop('disabled', false);
 		$link.removeClass('disabled').attr('href', base_url + 'penjualan-mobile/edit?id=' + detail['id_penjualan']);
 
-		if (detail.status_transaksi == 2 || detail.status_transaksi == 3) {
+		if (detail.status_transaksi == 2) {
 			$('.btn-aksi-selesai').css('display', 'none');
+			$('.link-edit').css('display', 'block');
+		} else if (detail.status_transaksi == 3) {
+			$('.btn-aksi-selesai').css('display', 'none');
+			$('.link-edit').css('display', 'none');
 		} else {
-			$('.btn-aksi-selesai').css('display', 'block');
+			$('.link-edit').css('display', 'block');
 		}
 		
 		if (osRightPanel) {
@@ -314,6 +318,9 @@ $(document).ready(function() {
 		
 		$btn_all.prop('disabled', true);
 		$btn_submit.prepend($spinner);
+
+		let invoice_detail = $(this).parent().find('.invoice-detail').text();
+		detail = JSON.parse(invoice_detail);
 		
 		$.ajax({
 			url: base_url + 'pos-kasir/ajaxSaveData',
@@ -346,6 +353,13 @@ $(document).ready(function() {
 					Toast.fire({
 						html: '<div class="toast-content d-flex"><i class="far fa-check-circle me-2 mt-1"></i>' + parse_message(data.message) + '</div>'
 					})
+
+					dataTables.draw();
+					url_detail = base_url + 'penjualan-mobile/detail?id=' + detail['id_penjualan'];
+					history.pushState( url_detail,'',url_detail);
+					
+					detail.status_transaksi = 3;
+					show_detail_penjualan(detail);
 				} else {
 					bootbox.alert('<div class="d-flex my-2"><span class="text-danger"><i class="fas fa-times-circle me-3" style="font-size:20px"></i></span>' + parse_message(data.message) + '</div>');
 				}

@@ -90,7 +90,7 @@
 				<div class="btn-detail btn-container" <?=$display_detail?>>
 					<?php
 					if (has_permission('update_all', 'penjualan-mobile')) { ?>
-						<!-- <a href="#" class="link-edit btn btn-info me-1 disabled" disabled><i class="fas fa-edit me-2"></i>Edit</a> -->
+						<a href="#" class="link-edit btn btn-warning me-1 disabled" disabled><i class="fas fa-edit me-2"></i>Edit</a>
 					<?php
 					}
 					?>

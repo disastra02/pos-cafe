@@ -139,9 +139,14 @@ class Penjualan_mobile extends \App\Controllers\BaseController
 
 		$no = $this->request->getPost('start') + 1 ?: 1;
 		foreach ($query['data'] as $key => &$val) {
-			$status_transaksi_awal = '<span class="badge text-bg-primary">'.$this->model->getJumlahBarang($val['id_penjualan'], 1).' Siap Dikirim</span> &nbsp; <span class="badge text-bg-warning">'.$this->model->getJumlahBarang($val['id_penjualan'], 100).' Diproses</span>';
-			$status_transaksi = ($this->model->getJumlahBarang($val['id_penjualan'], 2) == $this->model->getJumlahBarang($val['id_penjualan']) || $this->model->getJumlahBarang($val['id_penjualan'], 3) == $this->model->getJumlahBarang($val['id_penjualan'])) ? '<span class="badge text-bg-success">Selesai</span>' : $status_transaksi_awal;
-
+			$status_transaksi = '';
+			if ($this->model->getJumlahBarang($val['id_penjualan'], 2) == $this->model->getJumlahBarang($val['id_penjualan'])) {
+				$status_transaksi = '<span class="badge text-bg-secondary">Selesai Dikirim</span>';
+			} else if ($this->model->getJumlahBarang($val['id_penjualan'], 3) == $this->model->getJumlahBarang($val['id_penjualan'])) {
+				$status_transaksi = '<span class="badge text-bg-success">Selesai Transaksi</span>';
+			} else {
+				$status_transaksi = '<span class="badge text-bg-primary">'.$this->model->getJumlahBarang($val['id_penjualan'], 1).' Siap Dikirim</span> &nbsp; <span class="badge text-bg-warning">'.$this->model->getJumlahBarang($val['id_penjualan'], 100).' Diproses</span>';
+			}
 
 			$val['no_invoice'] = $val['no_invoice'] . '<span style="display:none" class="invoice-detail">' . json_encode($val) . '</span>';
 			$val['nama_customer'] = $val['nama_customer'] ?: '-';

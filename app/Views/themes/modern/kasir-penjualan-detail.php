@@ -1,4 +1,18 @@
 <div class="row mb-3">
+	<label class="col-sm-4">Status</label>
+	<div class="col-sm-8">
+		<?php 
+		if ($penjualan['status_transaksi'] == 0 || $penjualan['status_transaksi'] == 1) {
+			echo '<span class="badge text-bg-warning">Diproses Dapur</span>';
+		} else if ($penjualan['status_transaksi'] == 2) {
+			echo '<span class="badge text-bg-secondary">Selesai Dikirim</span>';
+		} else {
+			echo '<span class="badge text-bg-success">Selesai Transaksi</span>';
+		}
+		?>
+	</div>
+</div>
+<div class="row mb-3">
 	<label class="col-sm-4">Nama Pelanggan</label>
 	<div class="col-sm-8"><?=$penjualan['customer_nama']?></div>
 </div>

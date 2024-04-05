@@ -77,7 +77,7 @@
 	</div>
 	<div class="row">
 		<div class="col-sm-12">
-			<div class="right-panel-footer d-flex justify-content-end shadow-sm rounded-bottom px-4 py-3">
+			<div class="right-panel-footer d-flex justify-content-end shadow-sm rounded-bottom px-4 py-3 d-none">
 				<?php
 					$display_edit = $action == 'edit' ? '' : 'style="display:none"';
 					$display_detail = $action == 'edit' ? 'style="display:none"' : '';
