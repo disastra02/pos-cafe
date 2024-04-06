@@ -51,7 +51,7 @@ class LaporanPenjualanPerinvoiceModel extends \App\Models\BaseModel
 		require_once(ROOTPATH . "/app/ThirdParty/PHPXlsxWriter/xlsxwriter.class.php");
 		$jenis_bayar = !empty($_GET['jenis_bayar']) ? $jenis_bayar = ' AND jenis_bayar = "' . $_GET['jenis_bayar'] . '"' : '';
 		$id_customer = !empty($_GET['id_customer']) ? $id_customer = ' AND id_customer = "' . $_GET['id_customer'] . '"' : '';
-		$sql = 'SELECT nama_customer, no_invoice, tgl_invoice, sub_total, total_diskon, neto, untung_rugi, IF(kurang_bayar < 0, 0, kurang_bayar) AS kurang_bayar, status 
+		$sql = 'SELECT customer_nama, no_invoice, tgl_invoice, sub_total, total_diskon, neto, untung_rugi, IF(kurang_bayar < 0, 0, kurang_bayar) AS kurang_bayar, status 
 				FROM penjualan
 				LEFT JOIN customer USING(id_customer)
 				WHERE tgl_invoice >= ? AND tgl_invoice <= ? ' . $jenis_bayar . $id_customer;
@@ -60,7 +60,7 @@ class LaporanPenjualanPerinvoiceModel extends \App\Models\BaseModel
 
 		$colls = [
 			'no' 			=> ['type' => '#,##0', 'width' => 5, 'title' => 'No'],
-			'nama_customer' => ['type' => 'string', 'width' => 30, 'title' => 'Nama Customer'],
+			'customer_nama' => ['type' => 'string', 'width' => 30, 'title' => 'Nama Customer'],
 			'no_invoice' 	=> ['type' => 'string', 'width' => 20, 'title' => 'No. Invoice'],
 			'tgl_invoice' 	=> ['type' => 'date', 'width' => 13, 'title' => 'Tgl. Invoice'],
 			'sub_total' 	=> ['type' => '#,##0', 'width' => 11, 'title' => 'Sub Total'],

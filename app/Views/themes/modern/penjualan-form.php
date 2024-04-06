@@ -27,8 +27,24 @@
 		}
 		?>
 		<form method="post" action="" class="form-horizontal" enctype="multipart/form-data">
+			<input type="hidden" name="nomor_meja" value="<?=set_value('id_meja', @$penjualan['id_meja'])?>">
+			<input type="hidden" name="name_customer" value="<?=set_value('customer_nama', @$penjualan['customer_nama'])?>">
+
+			<div class="row mb-3">
+			<label class="col-sm-4">Nama Pelanggan</label>
+				<div class="col-sm-8"><?=set_value('customer_nama', @$penjualan['customer_nama'])?></div>
+			</div>
+			<div class="row mb-3">
+				<label class="col-sm-4">No. Invoice</label>
+				<div class="col-sm-8"><?=set_value('no_invoice', @$penjualan['no_invoice'])?></div>
+			</div>
+			<div class="row mb-3">
+				<label class="col-sm-4">Tanggal</label>
+				<div class="col-sm-8"><?=set_value('tgl_invoice', format_tanggal(@$penjualan['tgl_invoice'], 'dd-mm-yyyy'))?></div>
+			</div>
+			
 			<div>
-				<div class="form-group row mb-3">
+				<div class="form-group row mb-3 d-none">
 					<label class="col-sm-3 col-md-2 col-lg-3 col-xl-2 col-form-label">Nama Customer</label>
 					<div class="col-sm-6">
 						<div class="input-group">
@@ -43,14 +59,14 @@
 						<input class="form-control" type="hidden" name="id_customer" id="id-customer" value="<?=set_value('id_customer', @$penjualan['id_customer'])?>" required="required"/>
 					</div>
 				</div>
-				<div class="form-group row mb-3">
+				<div class="form-group row mb-3 d-none">
 					<label class="col-sm-3 col-md-2 col-lg-3 col-xl-2 col-form-label">No. Invoice</label>
 					<div class="col-sm-6">
 						<input class="form-control" type="text" name="no_invoice" id="no-invoice" value="<?=set_value('no_invoice', @$penjualan['no_invoice'])?>" readonly="readonly"/>
 						<small class="text-muted">Digenerate otomatis oleh sistem</small>
 					</div>
 				</div>
-				<div class="form-group row mb-3">
+				<div class="form-group row mb-3 d-none">
 					<label class="col-sm-3 col-md-2 col-lg-3 col-xl-2 col-form-label">Tanggal</label>
 					<div class="col-sm-6">
 						<input class="form-control flatpickr tanggal-invoice flatpickr" type="text" name="tgl_invoice" value="<?=set_value('tgl_invoice', format_tanggal(@$penjualan['tgl_invoice'], 'dd-mm-yyyy'))?>" required="required"/>

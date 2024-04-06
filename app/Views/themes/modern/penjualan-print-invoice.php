@@ -182,7 +182,7 @@ require_once(ROOTPATH . 'app/ThirdParty/TclibBarcode/autoload.php');
 		</div>
 		<div class="logo-container">
 			<div class="identitas-container">
-				<img src="<?=base_url()?>/public/images/<?=$setting['logo']?>"/>
+				<!-- <img src="<?=base_url()?>/public/images/<?=$setting['logo']?>"/> -->
 				<div class="detail">
 					<p class="brand-text"><?=$identitas['nama']?></p>
 					<p><?=$identitas['alamat']?></p>

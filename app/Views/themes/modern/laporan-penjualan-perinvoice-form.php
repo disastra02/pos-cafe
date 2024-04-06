@@ -21,10 +21,10 @@ helper('html');
 			<div class="row mb-3">
 				<label class="col-sm-2 col-form-label">Jenis Pembayaran</label>
 				<div class="col-sm-5">
-					<?=options(['name' => 'jenis_bayar'], ['' => 'Semua', 'tunai' => 'Tunai', 'transfer' => 'Transfer', 'tempo' => 'Tempo'])?>
+					<?=options(['name' => 'jenis_bayar'], ['' => 'Semua', 'tunai' => 'Tunai', 'transfer' => 'Non Tunai'])?>
 				</div>
 			</div>
-			<div class="row mb-3">
+			<div class="row mb-3 d-none">
 				<label class="col-sm-2 col-form-label">Nama Pelanggan</label>
 				<div class="col-sm-5">
 					<?php
@@ -81,9 +81,9 @@ helper('html');
 				?>
 				<div class="d-flex mb-3" style="justify-content:flex-end">
 					<div class="btn-group">
-					<button class="btn btn-outline-secondary me-0 btn-export btn-xs" type="button" id="btn-pdf" disabled="disabled"><i class="fas fa-file-pdf me-2"></i>PDF</button>
+					<!-- <button class="btn btn-outline-secondary me-0 btn-export btn-xs" type="button" id="btn-pdf" disabled="disabled"><i class="fas fa-file-pdf me-2"></i>PDF</button> -->
 					<button class="btn btn-outline-secondary me-0 btn-export btn-xs" type="button" id="btn-excel" disabled="disabled"><i class="fas fa-file-excel me-2"></i>XLSX</button>
-					<button class="btn btn-outline-secondary btn-export btn-xs" type="button" id="btn-send-email" disabled="disabled"><i class="fas fa-paper-plane me-2"></i>Email</button>
+					<!-- <button class="btn btn-outline-secondary btn-export btn-xs" type="button" id="btn-send-email" disabled="disabled"><i class="fas fa-paper-plane me-2"></i>Email</button> -->
 					</div>
 				</div>
 				<table id="table-result" class="table display table-striped table-bordered table-hover" style="width:100%">

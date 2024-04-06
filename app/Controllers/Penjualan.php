@@ -639,11 +639,16 @@ class Penjualan extends \App\Controllers\BaseController
 
 			$url_nota = base_url() . '/penjualan/printNota?id=' . $val['id_penjualan'];
 			$url_invoice = base_url() . '/penjualan/printInvoice?id=' . $val['id_penjualan'];
+			// $val['ignore_invoice'] = '<div class="btn-action-group">'
+			// 	. btn_link(['url' => $url_nota, 'label' => '', 'icon' => 'fas fa-print', 'attr' => ['data-url' => $url_nota, 'class' => 'btn btn-secondary btn-xs print-nota me-1', 'data-bs-toggle' => 'tooltip', 'data-bs-title' => 'Print Nota']])
+			// 	. btn_link(['url' => $url_invoice, 'label' => '', 'icon' => 'fas fa-print', 'attr' => ['data-url' => $url_invoice, 'class' => 'btn btn-warning btn-xs print-invoice me-1', 'data-bs-toggle' => 'tooltip', 'data-bs-title' => 'Print Invoice']])
+			// 	. btn_link(['url' => base_url() . '/penjualan/invoicePdf?id=' . $val['id_penjualan'], 'label' => '', 'icon' => 'fas fa-file-pdf', 'attr' => ['data-filename' => 'Invoice-' . $val['no_invoice'], 'target' => '_blank', 'class' => 'btn btn-danger btn-xs save-pdf me-1', 'data-bs-toggle' => 'tooltip', 'data-bs-title' => 'Download Invoice (PDF)']])
+			// 	. btn_label($attr_btn_email)
+			// 	. '</div>';
+
 			$val['ignore_invoice'] = '<div class="btn-action-group">'
 				. btn_link(['url' => $url_nota, 'label' => '', 'icon' => 'fas fa-print', 'attr' => ['data-url' => $url_nota, 'class' => 'btn btn-secondary btn-xs print-nota me-1', 'data-bs-toggle' => 'tooltip', 'data-bs-title' => 'Print Nota']])
 				. btn_link(['url' => $url_invoice, 'label' => '', 'icon' => 'fas fa-print', 'attr' => ['data-url' => $url_invoice, 'class' => 'btn btn-warning btn-xs print-invoice me-1', 'data-bs-toggle' => 'tooltip', 'data-bs-title' => 'Print Invoice']])
-				. btn_link(['url' => base_url() . '/penjualan/invoicePdf?id=' . $val['id_penjualan'], 'label' => '', 'icon' => 'fas fa-file-pdf', 'attr' => ['data-filename' => 'Invoice-' . $val['no_invoice'], 'target' => '_blank', 'class' => 'btn btn-danger btn-xs save-pdf me-1', 'data-bs-toggle' => 'tooltip', 'data-bs-title' => 'Download Invoice (PDF)']])
-				. btn_label($attr_btn_email)
 				. '</div>';
 			$no++;
 		}
