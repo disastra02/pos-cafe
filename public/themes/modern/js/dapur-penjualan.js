@@ -6,7 +6,7 @@ function show_detail_penjualan (detail)
 	$container.append($spinner);
 	
 	if (!detail) {
-		$container.append('<div class="alert alert-danger">Data tidak ditemukan</div>');
+		$container.html('<div class="alert alert-danger">Data tidak ditemukan</div>');
 		$spinner.remove();
 		return;
 	}
@@ -19,14 +19,16 @@ function show_detail_penjualan (detail)
 	// $link.removeClass('link-spa');
 	
 	$.get(base_url + 'penjualan/detailDapur?mobile=true&id=' + detail['id_penjualan'], function (data) {
-		$container.append(data);
+		$container.html(data);
 		$spinner.remove();
 		$footer_right = $('.right-panel-footer');
 		
 		$btn_save = $footer_right.find('.btn-save');
 		$btn_save.hide();
-		$btn_save.find('.invoice-detail').remove();
-		$btn_save.append('<span style="display:none" class="invoice-detail">' + JSON.stringify(detail) + '</span>');
+		// $btn_save.find('.invoice-detail').remove();
+		// $btn_save.append('<span style="display:none" class="invoice-detail">' + JSON.stringify(detail) + '</span>');
+		$('.invoice-detail-view').html('');
+		$('.invoice-detail-view').html(JSON.stringify(detail));
 		
 		$footer_right.find('.btn-detail').show();
 		$buttons.prop('disabled', false);
@@ -63,12 +65,12 @@ function show_form_penjualan(id) {
 
 		if (!data) {
 			data = '<div class="alert alert-danger">Data tidak ditemukan</div>';
-			$container.append(data);
+			$container.html(data);
 			$spinner.remove();
 			return;
 		}
 
-		$container.append(data);
+		$container.html(data);
 		$spinner.remove();
 		$footer_right = $('.right-panel-footer');
 		
@@ -246,7 +248,7 @@ $(document).ready(function() {
 	
 	$(document).undelegate('.btn-cancel', 'click').delegate('.btn-cancel', 'click', function() {
 		
-		let invoice_detail = $(this).parent().find('.invoice-detail').text();
+		let invoice_detail = $(this).parent().find('.invoice-detail-view').text();
 		detail = JSON.parse(invoice_detail);
 		
 		url_detail = base_url + 'dapur-penjualan/detail?id=' + detail['id_penjualan'];
@@ -490,10 +492,6 @@ $(document).ready(function() {
 			
 			show_form_penjualan(id)
 		}
-
-		let suara = new Audio(base_url + 'public/files/audio/success.wav');
-		suara.play();
-		show_toast(`Pesanan selesai (Invoice: ${data.no_invoice})`);
 	})
 
 	socketConnection.on('terimaAll', data => {
@@ -505,4 +503,8 @@ $(document).ready(function() {
 			}
 		}
 	})
+
+	$(window).on('beforeunload',function(){
+		window.location.reload()
+	});
 })

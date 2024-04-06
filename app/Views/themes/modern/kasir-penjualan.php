@@ -6,11 +6,11 @@
 		<?php
 		$column =[
 					'ignore_urut' => 'No'
-					, 'no_invoice' => 'No. Invoice'
+					, 'customer_nama' => 'Customer'
 					, 'tgl_invoice' => 'Tanggal'
 					, 'neto' => 'Total'
 					, 'ignore_status_pesanan' => 'Pesanan'
-					, 'id_meja' => 'Meja'
+					, 'ignore_meja' => 'Meja'
 				];
 		
 		$settings['order'] = [2,'desc'];
@@ -31,7 +31,7 @@
 			<thead>
 				<tr>
 					<th>No</th>
-					<th scope="col">No. Invoice</th>
+					<th scope="col">Customer</th>
 					<th scope="col">Tanggal</th>
 					<th scope="col">Total</th>
 					<th scope="col">Pesanan</th>
@@ -85,7 +85,7 @@
 				<div class="btn-save btn-container" <?=$display_edit?>>
 					<button class="btn-cancel btn btn-secondary me-1" disabled><i class="fas fa-times me-2"></i>Cancel</button>
 					<button class="btn-submit btn btn-primary me-1" disabled><i class="fas fa-save me-2"></i>Simpan</button>
-					<span style="display:none" class="invoice-detail"><?=json_encode($penjualan_detail)?></span>
+					<span style="display:none" class="invoice-detail-view"><?=json_encode($penjualan_detail)?></span>
 				</div>
 				<div class="btn-detail btn-container" <?=$display_detail?>>
 					<?php

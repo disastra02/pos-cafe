@@ -307,7 +307,7 @@
 						<!-- End Input Hidden -->
 
 						<div class="form-group row mb-3">
-							<label class="col-sm-3 col-form-label">Nomor Meja <span class="text-danger">*</span></label>
+							<label class="col-sm-3 col-form-label">Nomor Meja</label>
 							<div class="col-sm-9">
 								<?= options(['name' => 'nomor_meja', 'id' => 'nomor_meja', 'required' => 'required'], $meja) ?>
 							</div>

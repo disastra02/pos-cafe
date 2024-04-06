@@ -606,4 +606,16 @@ class PenjualanMobileModel extends \App\Models\BaseModel
 
 		return $result;
 	}
+
+	public function getNameMeja($id)
+	{
+		$sql = 'SELECT * FROM meja WHERE id_meja = '. $id;
+		$result = $this->db->query($sql)->getRow();
+		$nama = '-';
+		if ($result) {
+			$nama = $result->nama;
+		}
+
+		return $nama;
+	}
 }

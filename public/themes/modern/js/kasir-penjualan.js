@@ -6,7 +6,7 @@ function show_detail_penjualan (detail)
 	$container.append($spinner);
 	
 	if (!detail) {
-		$container.append('<div class="alert alert-danger">Data tidak ditemukan</div>');
+		$container.html('<div class="alert alert-danger">Data tidak ditemukan</div>');
 		$spinner.remove();
 		return;
 	}
@@ -19,15 +19,16 @@ function show_detail_penjualan (detail)
 	// $link.removeClass('link-spa');
 	
 	$.get(base_url + 'penjualan/detailKasir?mobile=true&id=' + detail['id_penjualan'], function (data) {
-		console.log('oke');
-		$container.append(data);
+		$container.html(data);
 		$spinner.remove();
 		$footer_right = $('.right-panel-footer');
 		
 		$btn_save = $footer_right.find('.btn-save');
 		$btn_save.hide();
-		$btn_save.find('.invoice-detail').remove();
-		$btn_save.append('<span style="display:none" class="invoice-detail">' + JSON.stringify(detail) + '</span>');
+		// $btn_save.find('.invoice-detail').remove();
+		// $btn_save.append('<span style="display:none" class="invoice-detail">' + JSON.stringify(detail) + '</span>');
+		$('.invoice-detail-view').html('');
+		$('.invoice-detail-view').html(JSON.stringify(detail));
 		
 		$footer_right.find('.btn-detail').show();
 		$buttons.prop('disabled', false);
@@ -72,12 +73,12 @@ function show_form_penjualan(id) {
 
 		if (!data) {
 			data = '<div class="alert alert-danger">Data tidak ditemukan</div>';
-			$container.append(data);
+			$container.html(data);
 			$spinner.remove();
 			return;
 		}
 
-		$container.append(data);
+		$container.html(data);
 		$spinner.remove();
 		$footer_right = $('.right-panel-footer');
 		
@@ -256,7 +257,7 @@ $(document).ready(function() {
 	
 	$(document).undelegate('.btn-cancel', 'click').delegate('.btn-cancel', 'click', function() {
 		
-		let invoice_detail = $(this).parent().find('.invoice-detail').text();
+		let invoice_detail = $(this).parent().find('.invoice-detail-view').text();
 		detail = JSON.parse(invoice_detail);
 		
 		url_detail = base_url + 'kasir-penjualan/detail?id=' + detail['id_penjualan'];
@@ -316,7 +317,7 @@ $(document).ready(function() {
 		$btn_all.prop('disabled', true);
 		$btn_submit.prepend($spinner);
 
-		let invoice_detail = $(this).parent().find('.invoice-detail').text();
+		let invoice_detail = $(this).parent().find('.invoice-detail-view').text();
 		detail = JSON.parse(invoice_detail);
 		
 		$.ajax({
@@ -416,7 +417,6 @@ $(document).ready(function() {
 			if ($table.is(':hidden')) {
 				$first_tbody.remove();
 			}
-			console.log(barang);
 			harga_satuan = barang.harga_jual || 0;
 			
 			$tbody.find('.nama-barang').text(barang.nama_barang);
@@ -499,4 +499,100 @@ $(document).ready(function() {
 		suara.play();
 		show_toast(`Pesanan selesai (Invoice: ${data.no_invoice})`);
 	})
+
+	// Kalkulasi
+	$(document).undelegate('.item-bayar', 'keyup').delegate('.item-bayar', 'keyup', function(e) 
+	{
+		calculate_total();
+	});
+
+	function calculate_total() 
+	{
+		$harga_barang = $('.right-panel-body').find('.harga-barang-input');
+
+		subtotal = 0;
+		$harga_barang.each(function(i, elm) 
+		{
+			value = $(elm).val();
+			subtotal += setInt( value );
+		});
+		
+		// Diskon barang
+		$('.diskon-barang-nilai').each(function(i, elm) {
+			$elm = $(elm);
+			diskon_nilai = setInt($elm.val());
+			if (diskon_nilai) {
+				$tbody = $elm.parents('tbody').eq(0);
+				jenis = $tbody.find('.diskon-barang-jenis').val();
+				nilai = setInt($tbody.find('.harga-barang-input').val());
+				if (jenis == '%') {
+					diskon_nilai = diskon_nilai / 100 * nilai;
+				}
+				subtotal -= diskon_nilai;
+			}
+		});
+		
+		$('#subtotal-text').text(format_ribuan(subtotal));
+		$('#subtotal-input').val(subtotal);
+		
+		// Diskon
+		let diskon_total_jenis = $('#diskon-total-jenis').val();
+		let diskon_total = setInt( $('#diskon-total-nilai').val(), 10 );
+		
+		if (diskon_total) {
+			if (diskon_total_jenis == '%') {
+				if (diskon_total >= 100) {
+					diskon_total = 100;
+				}
+				jumlah_diskon = Math.round(subtotal * diskon_total / 100);
+			} else {
+				jumlah_diskon = diskon_total;
+			}
+			subtotal = subtotal - jumlah_diskon;
+		}
+
+		// Penyesuaian
+		let penyesuaian = setInt( $('#penyesuaian-nilai').val());
+		let neto = subtotal + penyesuaian;
+
+		// Pajak
+		tarif_pajak = $('#pajak-nilai').val();
+		if (tarif_pajak) {
+			pajak = Math.round( neto * parseInt(tarif_pajak) / 100 );
+			neto = neto + pajak;
+		}
+
+		$('.total-text').text(format_ribuan(neto));
+		$('#total-input').val(neto);
+		$('.jml-tagihan').val(neto);
+		
+		$('.jml-bayar').trigger('keyup');
+		
+		// Bayar
+		let $item_bayar = $('.item-bayar');
+		let total_bayar = 0;
+		$item_bayar.each(function(i, elm) {
+			bayar = setInt( $(elm).val() );
+			total_bayar += bayar;
+		})
+		
+		$('#total-bayar').text(format_ribuan(total_bayar));
+		
+		if (total_bayar < neto) {
+			$('#kembali-row').hide();
+			$('#kurang-bayar-row').show();
+			$('#kurang-bayar-nilai').text( format_ribuan(neto - total_bayar) );
+		} else {
+			$('#kurang-bayar-row').hide();
+			$('#kembali-row').show();
+			$('#kembali-nilai').text( format_ribuan(total_bayar - neto) );
+		}
+		// $('.item-bayar').eq(0).trigger('keyup');
+		// $('.kurang-bayar').val(format_ribuan(neto));
+		
+	}
+
+	$(window).on('beforeunload',function(){
+		window.location.reload()
+	});
 })

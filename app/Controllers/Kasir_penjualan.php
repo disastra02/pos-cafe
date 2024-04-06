@@ -141,22 +141,24 @@ class Kasir_penjualan extends \App\Controllers\BaseController
 		foreach ($query['data'] as $key => &$val) {
 			$status_transaksi = '';
 			if ($this->model->getJumlahBarang($val['id_penjualan'], 2) == $this->model->getJumlahBarang($val['id_penjualan'])) {
-				$status_transaksi = '<span class="badge text-bg-secondary">Selesai Dikirim</span>';
+				$status_transaksi = '<span class="badge text-bg-secondary">Selesai<br>Dikirim</span>';
 			} else if ($this->model->getJumlahBarang($val['id_penjualan'], 3) == $this->model->getJumlahBarang($val['id_penjualan'])) {
-				$status_transaksi = '<span class="badge text-bg-success">Selesai Transaksi</span>';
+				$status_transaksi = '<span class="badge text-bg-success">Selesai<br>Transaksi</span>';
 			} else {
-				$status_transaksi = '<span class="badge text-bg-warning">Diproses Dapur</span>';
+				$status_transaksi = '<span class="badge text-bg-warning">Diproses<br>Dapur</span>';
 			}
+			$meja = ($val['id_meja'] == 0) ? '<span style="font-size: 12px;">Take Away</span>' : $this->model->getNameMeja($val['id_meja']);
+			$customer = $val['customer_nama'] ?: '-';
 
 			$val['no_invoice'] = $val['no_invoice'] . '<span style="display:none" class="invoice-detail">' . json_encode($val) . '</span>';
-			$val['nama_customer'] = $val['nama_customer'] ?: '-';
+			$val['customer_nama'] = $customer . '<span style="display:none" class="invoice-detail">' . json_encode($val) . '</span>';
 			$exp = explode(' ', $val['tgl_invoice']);
 			// $val['tgl_invoice'] = '<div class="text-end">' . format_tanggal($exp[0]) . '</div>';
 			$split = explode('-', $exp[0]);
 			$val['tgl_invoice'] = '<div class="text-end text-nowrap">' . $split[2] . '-' . $split[1] . '-' . $split[0] . '</div>';
 			$val['sub_total'] = '<div class="text-end">' . format_number($val['sub_total']) . '</div>';
 			$val['neto'] = '<div class="text-end">' . format_number($val['neto']) . '</div>';
-			$val['id_meja'] = '<div class="text-center">' . $val['id_meja'] . '</div>';
+			$val['ignore_meja'] = '<div class="text-center">' . $meja . '</div>';
 			$val['ignore_status_pesanan'] = '<div class="text-center">'.$status_transaksi.'</div>';
 			$val['total_diskon_item'] = '<div class="text-end">' . format_number($val['total_diskon_item']) . '</div>';
 			$val['kurang_bayar'] = '<div class="text-end">' . format_number($val['kurang_bayar']) . '</div>';

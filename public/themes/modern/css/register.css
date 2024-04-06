@@ -90,7 +90,7 @@ small.alert{
     background: transparent;
 }
 .card-header.transparent-header img {
-    width: 100%;
+    width: 50%;
     max-width: 100%;
 }
 .card-header {

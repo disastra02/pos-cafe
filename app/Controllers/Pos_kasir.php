@@ -73,6 +73,7 @@ class Pos_kasir extends \App\Controllers\BaseController
 		$this->data['setting_kasir'] = $setting_kasir;
 
 		$resultMeja = $this->model->getMeja();
+		$data_meja[] = '';
 		foreach ($resultMeja as $val) {
 			$data_meja[$val['id_meja']] = 'Meja '.$val['nama'];
 		}

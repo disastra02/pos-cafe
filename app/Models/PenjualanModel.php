@@ -501,7 +501,9 @@ class PenjualanModel extends \App\Models\BaseModel
 
 		// Update meja
 		$statusMeja = $_POST['jenis_bayar'] == "pending" ? 1 : NULL; 
-		$query = $this->db->table('meja')->where('id_meja', $_POST['nomor_meja'])->update(['status' => $statusMeja]);
+		if ($_POST['nomor_meja'] != 0) {
+			$query = $this->db->table('meja')->where('id_meja', $_POST['nomor_meja'])->update(['status' => $statusMeja]);
+		}
 
 		return $result;
 	}

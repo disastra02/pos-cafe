@@ -854,10 +854,10 @@ $(document).ready(function()
 					className: 'btn-success submit',
 					callback: function() 
 					{
-						if (!$('#nomor_meja').val()) {
-							show_toast('Silahkan pilih nomor meja terlebih dahulu', 'error');
-							return;
-						} 
+						// if (!$('#nomor_meja').val()) {
+						// 	show_toast('Silahkan pilih nomor meja terlebih dahulu', 'error');
+						// 	return;
+						// } 
 						
 						if (!$('#name_customer').val() && !$('#name_customer').val() == '') {
 							show_toast('Silahkan masukkan customer terlebih dahulu', 'error');
@@ -898,6 +898,7 @@ $(document).ready(function()
 										
 										show_toast('Data berhasil disimpan');
 										socketConnection.emit('kirimDapur', data.no_invoice);
+										window.location.reload();
 										return;
 									}
 									
@@ -1267,4 +1268,8 @@ $(document).ready(function()
 		suara.play();
 		show_toast(`Pesanan siap dikirim (Invoice: ${data.no_invoice} | Pesanan: ${data.nama_barang})`);
 	})
+
+	$(window).on('beforeunload',function(){
+		window.location.reload()
+	});
 })
