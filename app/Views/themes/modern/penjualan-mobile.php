@@ -83,7 +83,7 @@
 					$display_detail = $action == 'edit' ? 'style="display:none"' : '';
 				?>
 				<div class="btn-save btn-container" <?=$display_edit?>>
-					<button class="btn-cancel btn btn-secondary me-1" disabled><i class="fas fa-save me-2"></i>Cancel</button>
+					<button class="btn-cancel btn btn-secondary me-1" disabled><i class="fas fa-times me-2"></i>Cancel</button>
 					<button class="btn-submit btn btn-primary me-1" disabled><i class="fas fa-save me-2"></i>Simpan</button>
 					<span style="display:none" class="invoice-detail"><?=json_encode($penjualan_detail)?></span>
 				</div>

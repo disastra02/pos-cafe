@@ -95,6 +95,10 @@
 	}
 	?>
 
+	<script type="text/javascript" src="<?= $config->baseURL . 'public/themes/modern/js/realtime/socket/socket.io.js?r=' . time() ?>"></script>
+	<script>
+		const socketConnection = io.connect(`http://192.168.1.14:3000`, { transports : ['websocket'] });
+	</script>
 	<head>
 
 	<body>

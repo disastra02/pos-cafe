@@ -161,7 +161,7 @@ function show_toast(message, type = null) {
 				toast: true,
 				position: 'top-end',
 				showConfirmButton: false,
-				timer: 2500,
+				timer: 5500,
 				timerProgressBar: true,
 				iconColor: 'white',
 				customClass: {

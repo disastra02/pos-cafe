@@ -1,5 +1,7 @@
+var statusForm = null;
 function show_detail_penjualan (detail) 
 {
+	console.log("BERAPA")
 	$spinner = $('<div class="d-flex justify-content-center text-secondary"><div class="spinner-border" role="status"></div>');
 	$container = $('.right-panel-body').empty();
 	$container.append($spinner);
@@ -39,13 +41,15 @@ function show_detail_penjualan (detail)
 
 		if (detail.status_transaksi == 2) {
 			$('.btn-aksi-selesai').css('display', 'none');
-			$('.link-edit').css('display', 'block');
+			$('.link-edit').css('display', 'none');
 		} else if (detail.status_transaksi == 3) {
 			$('.btn-aksi-selesai').css('display', 'none');
 			$('.link-edit').css('display', 'none');
 		} else {
+			$('.btn-aksi-selesai').css('display', 'block');
 			$('.link-edit').css('display', 'block');
 		}
+		statusForm = 'detail';
 		
 		if (osRightPanel) {
 			osRightPanel.destroy();
@@ -83,6 +87,7 @@ function show_form_penjualan(id) {
 		$footer_right.find('.btn-detail').hide();
 		
 		$buttons.prop('disabled', false);
+		statusForm = 'form';
 
 		if (osRightPanel) {
 			osRightPanel.destroy();
@@ -183,8 +188,10 @@ $(document).ready(function() {
 						if (data.status == 'ok') {
 							show_toast('Data berhasil diperbarui');
 							dataTables.draw();
-							detail.status_transaksi = 2;
+							detail.status_transaksi = data.barang.status_transaksi ?? 2;
 							show_detail_penjualan(detail);
+
+							socketConnection.emit('kirimKasir', data.barang);
 							return;
 						} 
 
@@ -198,6 +205,8 @@ $(document).ready(function() {
 						console.log(xhr);
 					}
 				})
+			} else {
+				$spinner.remove();
 			}
 		});
 	});
@@ -329,7 +338,6 @@ $(document).ready(function() {
 			success: function(data) {
 				$spinner.remove();
 				$btn_all.prop('disabled', false);
-				// console.log(data);
 				data = JSON.parse(data);
 				
 				if (data.status == 'ok') {
@@ -358,8 +366,11 @@ $(document).ready(function() {
 					url_detail = base_url + 'penjualan-mobile/detail?id=' + detail['id_penjualan'];
 					history.pushState( url_detail,'',url_detail);
 					
-					detail.status_transaksi = 3;
+					detail.status_transaksi = data.penjualan.status_transaksi ?? 3;
 					show_detail_penjualan(detail);
+					statusForm = 'detail';
+
+					socketConnection.emit('kirimDapur', data.no_invoice);
 				} else {
 					bootbox.alert('<div class="d-flex my-2"><span class="text-danger"><i class="fas fa-times-circle me-3" style="font-size:20px"></i></span>' + parse_message(data.message) + '</div>');
 				}
@@ -444,7 +455,6 @@ $(document).ready(function() {
 	});
 	
 	$(document).undelegate('tr', 'click').delegate('tr', 'click', function() {
-
 		jenis = $(this).parents('table').eq(0).attr('data-tabel-jenis');
 		if (jenis != 'tabel-penjualan')
 			return;
@@ -476,5 +486,50 @@ $(document).ready(function() {
 		
 		id = $(this).attr('data-id');
 		show_form_penjualan(id);
+	})
+
+	// Realtime dari dapur -> pelayan
+	socketConnection.on('terimaPelayan', data => {
+		dataTables.draw();
+		console.log("BERAPA KALI")
+
+		if (statusForm) {
+			if (statusForm == 'detail') {
+				if ((typeof(detail) !== "undefined")) {
+					detail.status_transaksi = data.status_transaksi;
+					show_detail_penjualan(detail);
+				}
+			}
+
+			if (statusForm == 'form') {
+				const query_string = new URLSearchParams(window.location.search);
+				id = query_string.get('id');
+				
+				show_form_penjualan(id)
+			}
+		}
+
+		let suara = new Audio(base_url + 'public/files/audio/success.wav');
+		suara.play();
+		show_toast(`Pesanan siap dikirim (Invoice: ${data.no_invoice} | Pesanan: ${data.nama_barang})`);
+	})
+
+	socketConnection.on('terimaAll', data => {
+		dataTables.draw();
+
+		if (statusForm) {
+			if (statusForm == 'detail') {
+				if ((typeof(detail) !== "undefined")) {
+					show_detail_penjualan(detail);
+				}
+			}
+
+			if (statusForm == 'form') {
+				const query_string = new URLSearchParams(window.location.search);
+				id = query_string.get('id');
+				
+				show_form_penjualan(id)
+			}
+		}
 	})
 })

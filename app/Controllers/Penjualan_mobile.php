@@ -31,7 +31,7 @@ class Penjualan_mobile extends \App\Controllers\BaseController
 		$this->addJs($this->config->baseURL . 'public/vendors/flatpickr/dist/flatpickr.js');
 		$this->addStyle($this->config->baseURL . 'public/vendors/flatpickr/dist/flatpickr.min.css');
 
-		$this->addJs($this->config->baseURL . 'public/themes/modern/js/pos-kasir.js');
+		// $this->addJs($this->config->baseURL . 'public/themes/modern/js/pos-kasir.js');
 
 		$this->addStyle($this->config->baseURL . 'public/themes/modern/css/penjualan-mobile.css');
 		$this->addJs($this->config->baseURL . 'public/themes/modern/js/penjualan-mobile.js');

@@ -31,7 +31,7 @@ class Kasir_penjualan extends \App\Controllers\BaseController
 		$this->addJs($this->config->baseURL . 'public/vendors/flatpickr/dist/flatpickr.js');
 		$this->addStyle($this->config->baseURL . 'public/vendors/flatpickr/dist/flatpickr.min.css');
 
-		$this->addJs($this->config->baseURL . 'public/themes/modern/js/pos-kasir.js');
+		// $this->addJs($this->config->baseURL . 'public/themes/modern/js/pos-kasir.js');
 
 		$this->addStyle($this->config->baseURL . 'public/themes/modern/css/kasir-penjualan.css');
 		$this->addJs($this->config->baseURL . 'public/themes/modern/js/kasir-penjualan.js');

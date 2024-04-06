@@ -1,3 +1,4 @@
+var statusForm = null;
 function show_detail_penjualan (detail) 
 {
 	$spinner = $('<div class="d-flex justify-content-center text-secondary"><div class="spinner-border" role="status"></div>');
@@ -42,11 +43,14 @@ function show_detail_penjualan (detail)
 			osRightPanel.destroy();
 		}
 
-		if (detail.status_transaksi == 3) {
+		if (detail.status_transaksi == 2) {
+			$('.link-edit').css('display', 'block');
+		} else if (detail.status_transaksi == 3) {
 			$('.link-edit').css('display', 'none');
 		} else {
-			$('.link-edit').css('display', 'block');
+			$('.link-edit').css('display', 'none');
 		}
+		statusForm = 'detail';
 
 		osRightPanel = OverlayScrollbars( $('.right-panel-body'), {scrollbars : {autoHide: 'leave', autoHideDelay: 100}} );
 	})
@@ -81,6 +85,7 @@ function show_form_penjualan(id) {
 		$footer_right.find('.btn-detail').hide();
 		
 		$buttons.prop('disabled', false);
+		statusForm = 'form';
 
 		if (osRightPanel) {
 			osRightPanel.destroy();
@@ -349,8 +354,11 @@ $(document).ready(function() {
 					dataTables.draw();
 					url_detail = base_url + 'kasir-penjualan/detail?id=' + detail['id_penjualan'];
 					history.pushState( url_detail,'',url_detail);
-					detail.status_transaksi = 3;
+					detail.status_transaksi = data.penjualan.status_transaksi ?? 3;
 					show_detail_penjualan(detail);
+					statusForm = 'detail';
+
+					socketConnection.emit('kirimAll', data.no_invoice);
 				} else {
 					bootbox.alert('<div class="d-flex my-2"><span class="text-danger"><i class="fas fa-times-circle me-3" style="font-size:20px"></i></span>' + parse_message(data.message) + '</div>');
 				}
@@ -468,5 +476,27 @@ $(document).ready(function() {
 		
 		id = $(this).attr('data-id');
 		show_form_penjualan(id);
+	})
+
+	// Realtime dari pelayan -> kasir
+	socketConnection.on('terimaKasir', data => {
+		dataTables.draw();
+
+		if (statusForm) {
+			if ((typeof(detail) !== "undefined")) {
+				show_detail_penjualan(detail);
+			}
+		}
+
+		if (statusForm == 'form') {
+			const query_string = new URLSearchParams(window.location.search);
+			id = query_string.get('id');
+			
+			show_form_penjualan(id)
+		}
+
+		let suara = new Audio(base_url + 'public/files/audio/success.wav');
+		suara.play();
+		show_toast(`Pesanan selesai (Invoice: ${data.no_invoice})`);
 	})
 })

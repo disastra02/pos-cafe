@@ -22,11 +22,11 @@ class App extends BaseConfig
      * explicitly and never rely on auto-guessing, especially in production
      * environments.
      */
-     public $baseURL = 'http://localhost/luar/pos/';
+     public $baseURL = 'http://192.168.1.14/luar/pos/';
     
     public $imagesPath = ROOTPATH . 'public/images/';
 
-    public $imagesURL = 'http://localhost/luar/pos/public/images/';
+    public $imagesURL = 'http://192.168.1.14/luar/pos/public/images/';
 
     public $checkRoleAction = ['enable_global' => true, 'field' => 'id_user_input'];
 

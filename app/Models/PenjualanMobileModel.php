@@ -543,8 +543,19 @@ class PenjualanMobileModel extends \App\Models\BaseModel
 
 	public function saveUpdateStatus()
 	{
-		$query_penjualan = $this->db->table('penjualan')->where('id_penjualan', $_POST['id'])->update(['status_transaksi' => 1]);
-		$query_detail = $this->db->table('penjualan_detail')->where('id_penjualan_detail', $_POST['id'])->update(['status' => 1]);
+		// Update Data
+		$data = $this->db->query('SELECT * FROM penjualan_detail LEFT JOIN penjualan USING(id_penjualan) LEFT JOIN barang USING(id_barang) WHERE id_penjualan_detail = '.$_POST['id'])->getRowArray();
+
+		$result['barang'] = null;
+		if ($data != null) {
+			$result['barang'] = $data;
+
+			// Update Penjualan
+			$this->db->table('penjualan')->where('id_penjualan', $data['id_penjualan'])->update(['status_transaksi' => 1]);
+		}
+
+		// Update Penjualan Detail
+		$this->db->table('penjualan_detail')->where('id_penjualan_detail', $_POST['id'])->update(['status' => 1]);
 
 		if ($this->db->transStatus() === false) {
 			$result['status'] = 'error';
@@ -570,8 +581,20 @@ class PenjualanMobileModel extends \App\Models\BaseModel
 			return $result;
 		}
 
-		$query_penjualan = $this->db->table('penjualan')->where('id_penjualan', $_POST['id'])->update(['status_transaksi' => 2]);
-		$query_detail = $this->db->table('penjualan_detail')->where('id_penjualan', $_POST['id'])->update(['status' => 2]);
+
+		// Update Data
+		$dataPenjualan = $this->db->query('SELECT * FROM penjualan_detail LEFT JOIN penjualan USING(id_penjualan) LEFT JOIN barang USING(id_barang) WHERE id_penjualan_detail = '.$_POST['id'])->getRowArray();
+
+		$result['barang'] = null;
+		if ($dataPenjualan != null) {
+			$result['barang'] = $dataPenjualan;
+		}
+
+		// Update Penjualan
+		$this->db->table('penjualan')->where('id_penjualan', $_POST['id'])->update(['status_transaksi' => 2]);
+		
+		// Update Penjualan Detail
+		$this->db->table('penjualan_detail')->where('id_penjualan', $_POST['id'])->update(['status' => 2]);
 
 		if ($this->db->transStatus() === false) {
 			$result['status'] = 'error';

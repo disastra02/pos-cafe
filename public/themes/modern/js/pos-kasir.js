@@ -268,7 +268,6 @@ $(document).ready(function()
 	$(document).undelegate('.min-jml-barang', 'click').delegate('.min-jml-barang', 'click', function(e) {
 		
 		e.stopPropagation();
-		console.log('ee')
 		jml = setInt($(this).next().val());
 		$this = $(this)
 		if (jml == 1) {
@@ -855,7 +854,6 @@ $(document).ready(function()
 					className: 'btn-success submit',
 					callback: function() 
 					{
-						console.log($('#name_customer').val())
 						if (!$('#nomor_meja').val()) {
 							show_toast('Silahkan pilih nomor meja terlebih dahulu', 'error');
 							return;
@@ -888,7 +886,6 @@ $(document).ready(function()
 							data: data,
 							method: 'post',
 							success: function(data) {
-								console.log(setting_kasir);
 								$spinner.remove();
 								$btn_all.prop('disabled', false);
 								data = JSON.parse(data);
@@ -900,6 +897,7 @@ $(document).ready(function()
 										$('.del-barang-pilih').trigger('click');
 										
 										show_toast('Data berhasil disimpan');
+										socketConnection.emit('kirimDapur', data.no_invoice);
 										return;
 									}
 									
@@ -1075,7 +1073,6 @@ $(document).ready(function()
 		$harga_barang.each(function(i, elm) 
 		{
 			value = $(elm).val();
-			console.log(setInt(value));
 			subtotal += setInt( value );
 		});
 		
@@ -1263,4 +1260,11 @@ $(document).ready(function()
 			});
 		});
 	}
+
+	// Realtime dari dapur -> pelayan
+	socketConnection.on('terimaPelayan', data => {
+		let suara = new Audio(base_url + 'public/files/audio/success.wav');
+		suara.play();
+		show_toast(`Pesanan siap dikirim (Invoice: ${data.no_invoice} | Pesanan: ${data.nama_barang})`);
+	})
 })

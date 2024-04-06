@@ -1,3 +1,4 @@
+var statusForm = null;
 function show_detail_penjualan (detail) 
 {
 	$spinner = $('<div class="d-flex justify-content-center text-secondary"><div class="spinner-border" role="status"></div>');
@@ -18,7 +19,6 @@ function show_detail_penjualan (detail)
 	// $link.removeClass('link-spa');
 	
 	$.get(base_url + 'penjualan/detailDapur?mobile=true&id=' + detail['id_penjualan'], function (data) {
-		console.log('oke');
 		$container.append(data);
 		$spinner.remove();
 		$footer_right = $('.right-panel-footer');
@@ -38,6 +38,8 @@ function show_detail_penjualan (detail)
 		$link.prop('disabled', false);
 		$link.removeClass('disabled').attr('href', base_url + 'dapur-penjualan/edit?id=' + detail['id_penjualan']);
 		
+		statusForm = 'detail';
+
 		if (osRightPanel) {
 			osRightPanel.destroy();
 		}
@@ -283,6 +285,8 @@ $(document).ready(function() {
 							show_toast('Data berhasil diperbarui');
 							dataTables.draw();
 							show_detail_penjualan(detail);
+
+							socketConnection.emit('perbaruiDapur', data.barang);
 							return;
 						}
 						
@@ -291,6 +295,8 @@ $(document).ready(function() {
 						console.log(xhr);
 					}
 				})
+			} else {
+				$spinner.remove();
 			}
 		});
 	});
@@ -392,7 +398,6 @@ $(document).ready(function() {
 			if ($table.is(':hidden')) {
 				$first_tbody.remove();
 			}
-			console.log(barang);
 			harga_satuan = barang.harga_jual || 0;
 			
 			$tbody.find('.nama-barang').text(barang.nama_barang);
@@ -452,5 +457,52 @@ $(document).ready(function() {
 		
 		id = $(this).attr('data-id');
 		show_form_penjualan(id);
+	});
+
+
+	// Realtime dari pelayan -> dapur
+	socketConnection.on('terimaDapur', data => {
+		dataTables.draw();
+
+		if (statusForm) {
+			if ((typeof(detail) !== "undefined")) {
+				show_detail_penjualan(detail);
+			}
+		}
+
+		let suara = new Audio(base_url + 'public/files/audio/dapur.wav');
+		suara.play();
+		show_toast(`Pesanan masuk (Invoice: ${data})`);
+	})
+
+	socketConnection.on('terimaKasir', data => {
+		dataTables.draw();
+
+		if (statusForm) {
+			if ((typeof(detail) !== "undefined")) {
+				show_detail_penjualan(detail);
+			}
+		}
+
+		if (statusForm == 'form') {
+			const query_string = new URLSearchParams(window.location.search);
+			id = query_string.get('id');
+			
+			show_form_penjualan(id)
+		}
+
+		let suara = new Audio(base_url + 'public/files/audio/success.wav');
+		suara.play();
+		show_toast(`Pesanan selesai (Invoice: ${data.no_invoice})`);
+	})
+
+	socketConnection.on('terimaAll', data => {
+		dataTables.draw();
+
+		if (statusForm) {
+			if ((typeof(detail) !== "undefined")) {
+				show_detail_penjualan(detail);
+			}
+		}
 	})
 })
