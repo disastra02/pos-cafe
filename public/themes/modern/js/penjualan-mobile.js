@@ -490,26 +490,28 @@ $(document).ready(function() {
 
 	// Realtime dari dapur -> pelayan
 	socketConnection.on('terimaPelayan', data => {
-		dataTables.draw();
+		// dataTables.draw();
 
-		if (statusForm) {
-			if (statusForm == 'detail') {
-				if ((typeof(detail) !== "undefined")) {
-					show_detail_penjualan(detail);
-				}
-			}
+		// if (statusForm) {
+		// 	if (statusForm == 'detail') {
+		// 		if ((typeof(detail) !== "undefined")) {
+		// 			show_detail_penjualan(detail);
+		// 		}
+		// 	}
 
-			if (statusForm == 'form') {
-				const query_string = new URLSearchParams(window.location.search);
-				id = query_string.get('id');
+		// 	if (statusForm == 'form') {
+		// 		const query_string = new URLSearchParams(window.location.search);
+		// 		id = query_string.get('id');
 				
-				show_form_penjualan(id)
-			}
-		}
+		// 		show_form_penjualan(id)
+		// 	}
+		// }
 
 		let suara = new Audio(base_url + 'public/files/audio/success.wav');
 		suara.play();
-		show_toast(`Pesanan siap dikirim (Invoice: ${data.no_invoice} | Pesanan: ${data.nama_barang})`);
+		show_toast(`Pesanan siap dikirim (Nama: ${data.customer_nama} | Pesanan: ${data.nama_barang})`);
+
+		window.location.reload();
 	})
 
 	socketConnection.on('terimaAll', data => {

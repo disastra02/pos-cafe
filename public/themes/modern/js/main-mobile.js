@@ -26,7 +26,7 @@ const dataTables_settings =
 	'initComplete': function() {
 		$('#tabel-data_wrapper').find('.tabel-data').css('opacity', 1);
 		$('.dataTables_scrollBody').overlayScrollbars({ scrollbars : {autoHide: 'leave', autoHideDelay: 100}  });
-		$('input[type="search"]').focus();
+		// $('input[type="search"]').focus();
 		// $('.dataTables_scrollHead').css('overflow', 'auto');
 		
 	},

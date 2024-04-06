@@ -74,7 +74,7 @@
 	<div class="container">
 		
 		<header>
-			<img alt="logo" style="margin-bottom:10px" src="<?=base_url()?>/public/images/<?=$setting['logo']?>"/>
+			<!-- <img alt="logo" style="margin-bottom:10px" src="<?=base_url()?>/public/images/<?=$setting['logo']?>"/> -->
 			<div class="nama-perusahaan"><?=$identitas['nama']?></div>
 			<div><?=$identitas['alamat']?></div>
 			<div>Telp/WA <?=$identitas['no_telp']?></div>
@@ -87,15 +87,15 @@
 					<td>:</td>
 					<td><?=$penjualan['tgl_penjualan']?></td>
 				</tr>
-				<tr>
+				<!-- <tr>
 					<td>Kasir</td>
 					<td>:</td>
 					<td><?= !empty($petugas['nama']) ? $petugas['nama'] : '-'?></td>
-				</tr>
+				</tr> -->
 				<tr>
-					<td>Plg.</td>
+					<td>Nama</td>
 					<td>:</td>
-					<td><?=$pelanggan?></td>
+					<td><?=$penjualan['customer_nama']?></td>
 				</tr>
 			</table>
 		</div>

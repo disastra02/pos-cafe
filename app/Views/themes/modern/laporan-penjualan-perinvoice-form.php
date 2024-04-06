@@ -61,11 +61,9 @@ helper('html');
 				
 				$column =[
 							'ignore_urut' => 'No'
-							, 'nama_customer' => 'Nama Customer'
 							, 'no_invoice' => 'No. Invoice'
 							, 'tgl_penjualan' => 'Tgl. Transkasi'
 							, 'neto' => 'Neto'
-							, 'untung_rugi' => 'Untung/Rugi'
 							, 'kurang_bayar' => 'Kurang Bayar'
 						];
 				

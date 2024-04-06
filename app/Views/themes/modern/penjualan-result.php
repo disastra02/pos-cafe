@@ -13,7 +13,6 @@
 			
 		$column =[
 					'ignore_urut' => 'No'
-					, 'nama_customer' => 'Nama Customer'
 					, 'no_invoice' => 'No. Invoice'
 					, 'tgl_penjualan' => 'Tgl. Transkasi'
 					, 'neto' => 'Neto'

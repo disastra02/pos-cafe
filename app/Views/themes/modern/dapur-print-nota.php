@@ -93,9 +93,9 @@
 					<td><?= !empty($petugas['nama']) ? $petugas['nama'] : '-'?></td>
 				</tr> -->
 				<tr>
-					<td>Plg.</td>
+					<td>Nama</td>
 					<td>:</td>
-					<td><?=$pelanggan?></td>
+					<td><?=$penjualan['customer_nama']?></td>
 				</tr>
 			</table>
 		</div>

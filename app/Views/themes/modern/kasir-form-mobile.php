@@ -287,7 +287,7 @@ $display = $penjualan['id_customer'] ? '' : ' style="display:none"';
 				<td><div class="d-flex justify-content-between">Bayar</div></td>
 				<td></td>
 				<td>
-					<?=options(['name' => 'jenis_bayar', 'style' => 'width:auto'], ['tunai' => 'Tunai', 'transfer' => 'Transfer', 'tempo' => 'Tempo'], $penjualan['jenis_bayar'])?>
+					<?=options(['name' => 'jenis_bayar', 'style' => 'width:auto'], ['tunai' => 'Tunai', 'transfer' => 'Non Tunai'], $penjualan['jenis_bayar'])?>
 				</td>
 				<td></td>
 			</tr>

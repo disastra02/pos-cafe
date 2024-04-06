@@ -43,7 +43,6 @@
 							, 'harga_satuan' => 'Harga Satuan'
 							, 'qty' => 'Qty Terjual'
 							, 'harga_neto' => 'Neto'
-							, 'untung_rugi' => 'Untung (Rugi)'
 							, 'tgl_penjualan' => 'Tgl. Penjualan'
 						];
 				

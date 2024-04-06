@@ -1266,7 +1266,7 @@ $(document).ready(function()
 	socketConnection.on('terimaPelayan', data => {
 		let suara = new Audio(base_url + 'public/files/audio/success.wav');
 		suara.play();
-		show_toast(`Pesanan siap dikirim (Invoice: ${data.no_invoice} | Pesanan: ${data.nama_barang})`);
+		show_toast(`Pesanan siap dikirim (Nama: ${data.customer_nama} | Pesanan: ${data.nama_barang})`);
 	})
 
 	$(window).on('beforeunload',function(){

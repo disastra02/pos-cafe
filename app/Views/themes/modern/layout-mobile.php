@@ -129,7 +129,7 @@
 				if (has_permission('create', 'pos-kasir')) {
 				?>
 					<li class="nav-item bg-warning">
-						<a href="<?= base_url() ?>/pos-kasir" id="menu-kasir" class="nav-link <?= $active_kasir ?> link-spa"><i class="fas fa-cash-register"></i><span class="hide-mobile ms-2">Pesanan</span></a>
+						<a href="<?= base_url() ?>/pos-kasir" id="menu-kasir" class="nav-link <?= $active_kasir ?> link-spa"><i class="fas fa-cash-register"></i><span class="hide-mobile ms-2">Pesan Baru</span></a>
 					</li>
 				<?php
 				} ?>
@@ -164,9 +164,9 @@
 				<?php
 				if (has_permission('update_all', 'barang-mobile')) {
 				?>
-					<li class="nav-item bg-warning">
+					<!-- <li class="nav-item bg-warning">
 						<a href="<?= base_url() ?>/barang-mobile" class="nav-link <?= $active_barang ?> link-spa"><i class="fas fa-box-open"></i><span class="hide-mobile ms-2">Barang</span></a>
-					</li>
+					</li> -->
 				<?php
 				} ?>
 			</ul>
