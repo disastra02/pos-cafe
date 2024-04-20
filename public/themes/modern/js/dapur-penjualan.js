@@ -121,11 +121,16 @@ $(document).ready(function() {
 	})
 	
 	$(document).undelegate('.btn-print-nota', 'click').delegate('.btn-print-nota', 'click', function(e) {
+		printNota(e, this);
+	});
+
+	function printNota(e, val)
+	{
 		e.preventDefault();
-		url = base_url + 'penjualan/printNotaDapur?id=' + $(this).attr('data-id') + '&penjualan=' + $(this).attr('data-penjualan');
+		url = base_url + 'penjualan/printNotaDapur?id=' + $(val).attr('data-id') + '&penjualan=' + $(val).attr('data-penjualan');
 		is_mobile = /android|mobile/ig.test(navigator.userAgent);
 		if (is_mobile) {
-			const $this = $(this);
+			const $this = $(val);
 			$spinner = $('<div class="spinner-border spinner-border-sm me-2"></div>');
 			$spinner.prependTo($this);
 			$this.prop('disabled', true);
@@ -147,7 +152,7 @@ $(document).ready(function() {
 			window.open(url, top = 500, left = 500, width = 600, height = 600, menubar = 'no', status = 'no', titlebar = 'no'); 
 		}
 		return false;
-	});
+	}
 	
 	$(document).undelegate('.btn-print-invoice', 'click').delegate('.btn-print-invoice', 'click', function(e) {
 		e.preventDefault();
@@ -257,8 +262,9 @@ $(document).ready(function() {
 		show_detail_penjualan(detail);
 	})
 
-	$(document).undelegate('.btn-selesai', 'click').delegate('.btn-selesai', 'click', function() 
+	$(document).undelegate('.btn-selesai', 'click').delegate('.btn-selesai', 'click', function(e) 
 	{
+		let val = this;
 		$this = $(this);
 		let id = $(this).data('id');
 
@@ -285,10 +291,11 @@ $(document).ready(function() {
 						data = JSON.parse(data);
 						if (data.status == 'ok') {
 							show_toast('Data berhasil diperbarui');
-							dataTables.draw();
-							show_detail_penjualan(detail);
+							// dataTables.draw();
+							// show_detail_penjualan(detail);
 
 							socketConnection.emit('perbaruiDapur', data.barang);
+							printNota(e, val);
 							return;
 						}
 						
@@ -464,47 +471,80 @@ $(document).ready(function() {
 
 	// Realtime dari pelayan -> dapur
 	socketConnection.on('terimaDapur', data => {
-		dataTables.draw();
+		// dataTables.draw();
 
-		if (statusForm) {
-			if ((typeof(detail) !== "undefined")) {
-				show_detail_penjualan(detail);
-			}
-		}
+		// if (statusForm) {
+		// 	if ((typeof(detail) !== "undefined")) {
+		// 		show_detail_penjualan(detail);
+		// 	}
+		// }
 
 		let suara = new Audio(base_url + 'public/files/audio/dapur.wav');
 		suara.play();
 		show_toast(`Pesanan masuk (Invoice: ${data})`);
+
+		delayReload();
 	})
 
 	socketConnection.on('terimaKasir', data => {
-		dataTables.draw();
+		// dataTables.draw();
 
-		if (statusForm) {
-			if ((typeof(detail) !== "undefined")) {
-				show_detail_penjualan(detail);
-			}
-		}
+		// if (statusForm) {
+		// 	if ((typeof(detail) !== "undefined")) {
+		// 		show_detail_penjualan(detail);
+		// 	}
+		// }
 
-		if (statusForm == 'form') {
-			const query_string = new URLSearchParams(window.location.search);
-			id = query_string.get('id');
+		// if (statusForm == 'form') {
+		// 	const query_string = new URLSearchParams(window.location.search);
+		// 	id = query_string.get('id');
 			
-			show_form_penjualan(id)
-		}
+		// 	show_form_penjualan(id)
+		// }
+		delayReload();
 	})
 
 	socketConnection.on('terimaAll', data => {
-		dataTables.draw();
+		// dataTables.draw();
 
-		if (statusForm) {
-			if ((typeof(detail) !== "undefined")) {
-				show_detail_penjualan(detail);
-			}
-		}
+		// if (statusForm) {
+		// 	if ((typeof(detail) !== "undefined")) {
+		// 		show_detail_penjualan(detail);
+		// 	}
+		// }
+		delayReload();
 	})
 
-	$(window).on('beforeunload',function(){
-		window.location.reload()
-	});
+	// Realtime dari dapur -> pelayan
+	socketConnection.on('terimaPelayan', data => {
+		// dataTables.draw();
+
+		// if (statusForm) {
+		// 	if (statusForm == 'detail') {
+		// 		if ((typeof(detail) !== "undefined")) {
+		// 			show_detail_penjualan(detail);
+		// 		}
+		// 	}
+
+		// 	if (statusForm == 'form') {
+		// 		const query_string = new URLSearchParams(window.location.search);
+		// 		id = query_string.get('id');
+				
+		// 		show_form_penjualan(id)
+		// 	}
+		// }
+
+		delayReload();
+	})
+
+	function delayReload() 
+	{
+		setTimeout(() => {
+			window.location.reload();
+		}, 1250);
+	}
+
+	// $(window).on('beforeunload',function(){
+	// 	window.location.reload()
+	// });
 })

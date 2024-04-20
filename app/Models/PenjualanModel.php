@@ -305,9 +305,24 @@ class PenjualanModel extends \App\Models\BaseModel
 			$total_untung_rugi += $untung_rugi;
 			$total_harga_pokok += $_POST['harga_pokok'][$key] *  $qty * $qty_pengali;
 
+			$data_db_barang[$key]['status'] = $_POST['jenis_bayar'] == "pending" ? 0 : 3;
+			$data_db_barang[$key]['id_penjualan_detail'] = null;
 			if (!empty($_POST['id_penjualan_detail'][$key])) {
-				$data_db_barang[$key]['id_penjualan_detail'] = $_POST['id_penjualan_detail'][$key];
+				if ($_POST['id_penjualan_detail'][$key] != 0) {
+					$data_db_barang[$key]['id_penjualan_detail'] = $_POST['id_penjualan_detail'][$key];
+					$jumlah_pesanan = 'SELECT * FROM penjualan_detail WHERE id_penjualan_detail = ?';
+					$data_pesanan = $this->db->query($jumlah_pesanan, $_POST['id_penjualan_detail'][$key])->getRowArray();
+					
+					if ($data_pesanan != null) {
+						if (clean_number($_POST['qty'][$key]) == intval($data_pesanan['qty'])) {
+							$data_db_barang[$key]['status'] = $data_pesanan['status'];
+						} else {
+							$data_db_barang[$key]['status'] = $_POST['jenis_bayar'] == "pending" ? 0 : 3;
+						}
+					}
+				}
 			}
+			
 			$data_db_barang[$key]['id_barang'] = $id_barang;
 			$data_db_barang[$key]['qty'] = clean_number($_POST['qty'][$key]);
 			$data_db_barang[$key]['qty_pengali'] = $qty_pengali;
@@ -321,7 +336,6 @@ class PenjualanModel extends \App\Models\BaseModel
 			$data_db_barang[$key]['harga_neto'] = $harga_barang;
 			$data_db_barang[$key]['harga_pokok_total'] = $_POST['harga_pokok'][$key] * $qty_pengali;
 			$data_db_barang[$key]['untung_rugi'] = $untung_rugi;
-			$data_db_barang[$key]['status'] = $_POST['jenis_bayar'] == "pending" ? 0 : 3;
 
 			$sub_total += $harga_barang;
 		}
@@ -474,7 +488,7 @@ class PenjualanModel extends \App\Models\BaseModel
 
 		$sql = 'UNLOCK TABLES';
 		$this->db->query($sql);
-
+		
 		$this->db->table('penjualan_detail')->insertBatch($data_db_barang);
 
 		$this->db->transComplete();

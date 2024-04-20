@@ -50,7 +50,7 @@
 							<?php
 							if($val['status'] == 0 || $val['status'] == NULL) { 
 							?>
-								<button class="btn btn-success btn-sm btn-selesai mt-2" data-id="<?= $val['id_penjualan_detail'] ?>">Selesai</button>
+								<button class="btn btn-success btn-sm btn-selesai mt-2" data-id="<?= $val['id_penjualan_detail'] ?>" data-penjualan="<?=$penjualan['id_penjualan']?>">Selesai</button>
 							<?php 
 							} else {
 							?>

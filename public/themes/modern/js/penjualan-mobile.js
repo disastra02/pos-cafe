@@ -1,4 +1,4 @@
-var statusForm = null;
+var statusForm = null, statusUpdate = true;
 function show_detail_penjualan (detail) 
 {
 	$spinner = $('<div class="d-flex justify-content-center text-secondary"><div class="spinner-border" role="status"></div>');
@@ -188,9 +188,9 @@ $(document).ready(function() {
 						data = JSON.parse(data);
 						if (data.status == 'ok') {
 							show_toast('Data berhasil diperbarui');
-							dataTables.draw();
-							detail.status_transaksi = data.barang.status_transaksi ?? 2;
-							show_detail_penjualan(detail);
+							// dataTables.draw();
+							// detail.status_transaksi = data.barang.status_transaksi ?? 2;
+							// show_detail_penjualan(detail);
 
 							socketConnection.emit('kirimKasir', data.barang);
 							return;
@@ -314,10 +314,12 @@ $(document).ready(function() {
 		let invoice_detail = $(this).parent().find('.invoice-detail-view').text();
 		detail = JSON.parse(invoice_detail);
 		
+		dataTables.draw();
 		url_detail = base_url + 'penjualan-mobile/detail?id=' + detail['id_penjualan'];
 		history.pushState( url_detail,'',url_detail);
 		
 		show_detail_penjualan(detail);
+		window.location.reload();
 	})
 	
 	$(document).undelegate('.btn-submit', 'click').delegate('.btn-submit', 'click', function() {
@@ -370,6 +372,7 @@ $(document).ready(function() {
 					detail.status_transaksi = data.penjualan.status_transaksi ?? 3;
 					show_detail_penjualan(detail);
 					statusForm = 'detail';
+					statusUpdate = true;
 
 					socketConnection.emit('kirimDapur', data.no_invoice);
 				} else {
@@ -384,6 +387,7 @@ $(document).ready(function() {
 		})
 	})
 	
+	// Barang
 	$(document).undelegate('.add-barang').delegate('.add-barang', 'click', function() 
 	{
 		$this = $(this);
@@ -418,10 +422,10 @@ $(document).ready(function() {
 		.undelegate('.pilih-barang', 'click')
 		.delegate('.pilih-barang', 'click', function() {
 			
-
 			// Barang Popup
 			$tr = $(this).parents('tr').eq(0);
 			barang = JSON.parse($tr.find('.detail-barang').text());
+			console.log(barang)
 			
 			// List barang
 			$first_tbody = $table.find('tbody.barang-pilih-detail').eq(0);
@@ -430,27 +434,46 @@ $(document).ready(function() {
 				$first_tbody.remove();
 			}
 			harga_satuan = barang.harga_jual || 0;
-			
-			$tbody.find('.nama-barang').text(barang.nama_barang);
-			$tbody.find('.harga-satuan-text').text(format_ribuan(harga_satuan));
-			$tbody.find('.stok-text').text(format_ribuan(barang.stok));
-			$tbody.find('.barang-pilih-item-detail').text(JSON.stringify(barang));
-			
-			$tbody.find('.id-barang').val(barang.id_barang);
-			$tbody.find('.harga-satuan').val(harga_satuan);
-			$tbody.find('.stok').val(barang.stok);
-			$tbody.find('.satuan').val(barang.satuan);
-							
+
+			$id_barang = $table.find('.id-barang[value="' + barang.id_barang + '"]');
+			if ($id_barang.length) 
+			{
+				$row = $id_barang.parents('tbody').eq(0);
+				$qty = $row.find('.qty');
+				
+				if ($table.is(':hidden')) {
+					$qty.val(1);
+				} else {
+					jml = setInt($qty.val()) + 1;
+					$qty.val(format_ribuan(jml, true));
+				}
+				$qty.trigger('keyup');
+				
+			} else {
+				$tbody.find('.nama-barang').text(barang.nama_barang);
+				$tbody.find('.harga-satuan-text').text(format_ribuan(harga_satuan));
+				$tbody.find('.stok-text').text(format_ribuan(barang.stok));
+				$tbody.find('.barang-pilih-item-detail').text(JSON.stringify(barang));
+				
+				$tbody.find('.id-barang').val(barang.id_barang);
+				$tbody.find('.id-penjualan-detail').val(0);
+				$tbody.find('.harga-satuan').val(harga_satuan);
+				$tbody.find('.stok').val(barang.stok);
+				$tbody.find('.satuan').val(barang.satuan);
+								
+				$table.show();
+				$tbody.insertBefore($('#subtotal-tbody'));
+				$tbody.find('.qty').val(1).trigger('keyup');
+			}
+				
+			$row.find('.diskon-barang-nilai').trigger('keyup')
+			$row.show();
 			$table.show();
-			$tbody.insertBefore($('#subtotal-tbody'));
-			$tbody.find('.qty').val(1).trigger('keyup');
 			
 			$('.barang-pilih-empty').hide();
 			
 			$('.list-barang-terpilih').find('.belum-ada').remove();
 			$('.list-barang-terpilih').append('<small  class="px-3 py-2 me-2 mb-2 text-success bg-success bg-opacity-10 border border-success rounded-2">' + barang.nama_barang + '</small>');
-			
-			// $(document);
 		});
 	});
 	
@@ -478,7 +501,6 @@ $(document).ready(function() {
 	})
 	
 	$(document).undelegate('.link-edit', 'click').delegate('.link-edit', 'click', function(e) {
-		
 		e.preventDefault();
 		
 		url_detail = $(this).attr('href');
@@ -486,6 +508,8 @@ $(document).ready(function() {
 		
 		id = $(this).attr('data-id');
 		show_form_penjualan(id);
+
+		statusUpdate = false;
 	})
 
 	// Realtime dari dapur -> pelayan
@@ -511,29 +535,48 @@ $(document).ready(function() {
 		suara.play();
 		show_toast(`Pesanan siap dikirim (Nama: ${data.customer_nama} | Pesanan: ${data.nama_barang})`);
 
-		window.location.reload();
-	})
-
-	socketConnection.on('terimaAll', data => {
-		dataTables.draw();
-
-		if (statusForm) {
-			if (statusForm == 'detail') {
-				if ((typeof(detail) !== "undefined")) {
-					show_detail_penjualan(detail);
-				}
-			}
-
-			if (statusForm == 'form') {
-				const query_string = new URLSearchParams(window.location.search);
-				id = query_string.get('id');
-				
-				show_form_penjualan(id)
-			}
+		if (statusUpdate) {
+			delayReload();
 		}
 	})
 
-	$(window).on('beforeunload',function(){
-		window.location.reload()
-	});
-})
+	socketConnection.on('terimaAll', data => {
+		// dataTables.draw();
+
+		// if (statusForm) {
+		// 	if (statusForm == 'detail') {
+		// 		if ((typeof(detail) !== "undefined")) {
+		// 			show_detail_penjualan(detail);
+		// 		}
+		// 	}
+
+		// 	if (statusForm == 'form') {
+		// 		const query_string = new URLSearchParams(window.location.search);
+		// 		id = query_string.get('id');
+				
+		// 		show_form_penjualan(id)
+		// 	}
+		// }
+
+		delayReload();
+	})
+
+	socketConnection.on('terimaDapur', data => {
+		if (statusUpdate) {
+			delayReload();
+		}
+	})
+
+	socketConnection.on('terimaKasir', data => {
+		if (statusUpdate) {
+			delayReload();
+		}
+	})
+
+	function delayReload() 
+	{
+		setTimeout(() => {
+			window.location.reload();
+		}, 1250);
+	}
+});

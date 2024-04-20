@@ -471,7 +471,7 @@ class PenjualanMobileModel extends \App\Models\BaseModel
 		// Query Data
 		$sql = 'SELECT * FROM penjualan 
 				LEFT JOIN customer USING(id_customer)
-				' . $where . 'ORDER BY id_penjualan DESC LIMIT ' . $start . ', ' . $length;
+				' . $where . $order . ', id_penjualan DESC LIMIT ' . $start . ', ' . $length;
 		$data = $this->db->query($sql)->getResultArray();
 
 		return ['data' => $data, 'total_filtered' => $total_filtered];
@@ -520,7 +520,7 @@ class PenjualanMobileModel extends \App\Models\BaseModel
 		// Query Data
 		$sql = 'SELECT * FROM penjualan 
 				LEFT JOIN customer USING(id_customer)
-				' . $where .' ORDER BY id_penjualan DESC LIMIT ' . $start . ', ' . $length;
+				' . $where . $order . ', id_penjualan DESC LIMIT ' . $start . ', ' . $length;
 		$data = $this->db->query($sql)->getResultArray();
 
 		return ['data' => $data, 'total_filtered' => $total_filtered];
@@ -581,9 +581,8 @@ class PenjualanMobileModel extends \App\Models\BaseModel
 			return $result;
 		}
 
-
 		// Update Data
-		$dataPenjualan = $this->db->query('SELECT * FROM penjualan_detail LEFT JOIN penjualan USING(id_penjualan) LEFT JOIN barang USING(id_barang) WHERE id_penjualan_detail = '.$_POST['id'])->getRowArray();
+		$dataPenjualan = $this->db->query('SELECT * FROM penjualan WHERE id_penjualan = '.$_POST['id'])->getRowArray();
 
 		$result['barang'] = null;
 		if ($dataPenjualan != null) {

@@ -97,7 +97,7 @@
 
 	<script type="text/javascript" src="<?= $config->baseURL . 'public/themes/modern/js/realtime/socket/socket.io.js?r=' . time() ?>"></script>
 	<script>
-		const socketConnection = io.connect(`http://192.168.1.14:3000`, { transports : ['websocket'] });
+		const socketConnection = io.connect(`<?= $config->baseLinkService; ?>`, { transports : ['websocket'] });
 	</script>
 	<head>
 
@@ -127,9 +127,10 @@
 			<ul class="navbar-nav nav-justified w-100">
 				<?php
 				if (has_permission('create', 'pos-kasir')) {
-				?>
+					?>
 					<li class="nav-item bg-warning">
-						<a href="<?= base_url() ?>/pos-kasir" id="menu-kasir" class="nav-link <?= $active_kasir ?> link-spa"><i class="fas fa-cash-register"></i><span class="hide-mobile ms-2">Pesan Baru</span></a>
+						<!-- Remove link-spa untuk spa web -->
+						<a href="<?= base_url() ?>/pos-kasir" id="menu-kasir" class="nav-link <?= $active_kasir ?>"><i class="fas fa-cash-register"></i><span class="hide-mobile ms-2">Pesan Baru</span></a>
 					</li>
 				<?php
 				} ?>
@@ -137,7 +138,7 @@
 				if (has_permission('create', 'dapur-penjualan')) {
 				?>
 					<li class="nav-item bg-warning">
-						<a href="<?= base_url() ?>/dapur-penjualan" id="menu-invoice" class="nav-link <?= $active_dapur_penjualan ?> link-spa"><i class="fas fa-receipt"></i><span class="hide-mobile ms-2">Invoice</span></a>
+						<a href="<?= base_url() ?>/dapur-penjualan" id="menu-invoice" class="nav-link <?= $active_dapur_penjualan ?>"><i class="fas fa-receipt"></i><span class="hide-mobile ms-2">Invoice</span></a>
 					</li>
 				<?php
 				} ?>
@@ -145,7 +146,7 @@
 				if (has_permission('create', 'kasir-penjualan')) {
 				?>
 					<li class="nav-item bg-warning">
-						<a href="<?= base_url() ?>/kasir-penjualan" id="menu-invoice" class="nav-link <?= $active_kasir_penjualan ?> link-spa"><i class="fas fa-receipt"></i><span class="hide-mobile ms-2">Invoice</span></a>
+						<a href="<?= base_url() ?>/kasir-penjualan" id="menu-invoice" class="nav-link <?= $active_kasir_penjualan ?>"><i class="fas fa-receipt"></i><span class="hide-mobile ms-2">Invoice</span></a>
 					</li>
 				<?php
 				} ?>
@@ -153,19 +154,19 @@
 				if (has_permission('create', 'penjualan-mobile')) {
 				?>
 					<li class="nav-item bg-warning">
-						<a href="<?= base_url() ?>/penjualan-mobile" id="menu-invoice" class="nav-link <?= $active_penjualan ?> link-spa"><i class="fas fa-receipt"></i><span class="hide-mobile ms-2">Invoice</span></a>
+						<a href="<?= base_url() ?>/penjualan-mobile" id="menu-invoice" class="nav-link <?= $active_penjualan ?>"><i class="fas fa-receipt"></i><span class="hide-mobile ms-2">Invoice</span></a>
 					</li>
 				<?php
 				} ?>
 
 				<!-- <li class="nav-item bg-warning">
-					<a href="<?= base_url() ?>/penjualan-mobile" id="menu-invoice" class="nav-link <?= $active_penjualan ?> link-spa"><i class="fas fa-receipt"></i><span class="hide-mobile ms-2">Invoice</span></a>
+					<a href="<?= base_url() ?>/penjualan-mobile" id="menu-invoice" class="nav-link <?= $active_penjualan ?>"><i class="fas fa-receipt"></i><span class="hide-mobile ms-2">Invoice</span></a>
 				</li> -->
 				<?php
 				if (has_permission('update_all', 'barang-mobile')) {
 				?>
 					<!-- <li class="nav-item bg-warning">
-						<a href="<?= base_url() ?>/barang-mobile" class="nav-link <?= $active_barang ?> link-spa"><i class="fas fa-box-open"></i><span class="hide-mobile ms-2">Barang</span></a>
+						<a href="<?= base_url() ?>/barang-mobile" class="nav-link <?= $active_barang ?>"><i class="fas fa-box-open"></i><span class="hide-mobile ms-2">Barang</span></a>
 					</li> -->
 				<?php
 				} ?>
@@ -211,17 +212,17 @@
 						}
 						?>
 						<li class="nav-item">
-							<a class="nav-link link-dark py-3 px-3 link-spa" href="<?= base_url() . '/builtin/user/edit?mobile=true' ?>">
+							<a class="nav-link link-dark py-3 px-3" href="<?= base_url() . '/builtin/user/edit?mobile=true' ?>">
 								<i class="fas fa-user me-2"></i>Profile
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link link-dark py-3 px-3 link-spa" href="<?= base_url() . '/builtin/user/edit-password?mobile=true' ?>">
+							<a class="nav-link link-dark py-3 px-3" href="<?= base_url() . '/builtin/user/edit-password?mobile=true' ?>">
 								<i class="fas fa-lock me-2"></i>Ubah Password
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link link-dark py-3 px-3 link-spa" href="<?= base_url() . '/login/logout?mobile=true' ?>">
+							<a class="nav-link link-dark py-3 px-3" href="<?= base_url() . '/login/logout?mobile=true' ?>">
 								<i class="fas fa-sign-out-alt me-2"></i>Logout
 							</a>
 						</li>

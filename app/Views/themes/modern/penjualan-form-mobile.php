@@ -91,6 +91,7 @@ $display = $penjualan['id_customer'] ? '' : ' style="display:none"';
 								<div></div>
 								<span class="barang-pilih-item-detail" style="display:none"><?=json_encode($val)?></span>
 								<input type="hidden" class="id-barang" name="id_barang[]" value="<?=$val['id_barang']?>"/>
+								<input type="hidden" class="id-penjualan-detail" name="id_penjualan_detail[]" value="<?=$val['id_penjualan_detail']?>"/>
 								<input type="hidden" class="harga-satuan" name="harga_satuan[]" value="<?=$val['harga_satuan']?>"/>
 								<input type="hidden" class="harga-pokok" name="harga_pokok[]" value="<?=$val['harga_pokok']?>"/>
 								<input type="hidden" class="stok" name="stok[]" value="<?=$val['list_stok'][$penjualan['id_gudang']]?>"/>
@@ -125,7 +126,7 @@ $display = $penjualan['id_customer'] ? '' : ' style="display:none"';
 							<ul class="dropdown-menu">
 								<li><button type="button" class="dropdown-item del-item"><i class="far fa-trash-alt me-2"></i>Hapus Item</button></li>
 								<li><button type="button" class="dropdown-item add-discount"><i class="fas fa-plus me-2"></i>Tambah Diskon</button></li>
-								<li><button type="button" class="dropdown-item edit-item"><i class="fas fa-edit me-2"></i>Edit Harga</button></li>
+								<!-- <li><button type="button" class="dropdown-item edit-item"><i class="fas fa-edit me-2"></i>Edit Harga</button></li> -->
 							</ul>
 						</div>
 					</td>

@@ -37,6 +37,7 @@ class Pos_kasir extends \App\Controllers\BaseController
 		$this->addStyle($this->config->baseURL . 'public/themes/modern/css/pos-kasir.css');
 
 		$this->addJs($this->config->baseURL . 'public/themes/modern/js/pos-kasir.js');
+		$this->addJs($this->config->baseURL . 'public/themes/modern/js/pos-kasir-custom.js');
 
 		$result = $this->model->getAllGudang();
 		$id_gudang_selected = '';
