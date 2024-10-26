@@ -163,6 +163,29 @@
 				</div>
 			</div>
 		</div>
+		<div class="col-12 col-md-12 col-lg-12 col-xl-12 mb-4">
+			<div class="card" style="border-top: 3px solid #007bff;">
+				<div class="card-header">
+					<div class="card-header-start">
+						<h6 class="card-title"><i class="fas fa-chart-line"></i> Penjualan Perhari</h6>
+					</div>
+					<div class="card-header-end">
+						<?php
+							if (!empty($list_bulan)) {
+								echo '<form method="get" action="" class="d-flex">
+										' . options(['name' => 'perhari', 'id' => 'filter-perhari'], $list_bulan, $bulan) . '
+								</form>';
+							}
+						?>
+					</div>
+				</div>
+				<div class="card-body">
+					<div style="overflow: auto">
+						<canvas id="bar-container-perhari" style="min-width:500px;margin:auto;width:100%;height:280px;"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	<?php
 	if ($setting_stok['dashboard_show'] == 'Y') {
@@ -725,6 +748,8 @@
 
 <?php
 $data_penjualan = [];
+$data_penjualan_per_hari = [];
+$data_penjualan_per_hari_labels = [];
 $data_total_penjualan = [];
 $label_kategori = [];
 $jumlah_item_kategori = [];
@@ -735,6 +760,13 @@ if (!empty($penjualan)) {
 	foreach ($penjualan as $tahun => $arr) {
 		foreach ($arr as $val) {
 			$data_penjualan[$tahun][] = $val['total'];
+		}
+	}
+
+	foreach ($penjualan_per_hari as $tahun => $arr) {
+		foreach ($arr as $val) {
+			$data_penjualan_per_hari[$tahun][] = $val['total'];
+			$data_penjualan_per_hari_labels[] = $val['tanggal'];
 		}
 	}
 
@@ -758,6 +790,8 @@ if (!empty($penjualan)) {
 
 <script type="text/javascript">
 	let data_penjualan = <?= json_encode($data_penjualan) ?>;
+	let data_penjualan_per_hari = <?= json_encode($data_penjualan_per_hari) ?>;
+	let data_penjualan_per_hari_labels = <?= json_encode($data_penjualan_per_hari_labels) ?>;
 	let total_penjualan = <?= json_encode($data_total_penjualan) ?>;
 	let item_terjual = <?= json_encode($jumlah) ?>;
 	let item_terjual_label = <?= json_encode($nama) ?>;

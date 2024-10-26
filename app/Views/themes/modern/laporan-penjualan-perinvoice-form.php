@@ -18,7 +18,7 @@ helper('html');
 					<input type="hidden" value="<?=$end_date_db?>" id="end-date"/>
 				</div>
 			</div>
-			<div class="row mb-3">
+			<div class="row mb-3 d-none">
 				<label class="col-sm-2 col-form-label">Jenis Pembayaran</label>
 				<div class="col-sm-5">
 					<?=options(['name' => 'jenis_bayar'], ['' => 'Semua', 'tunai' => 'Tunai', 'transfer' => 'Non Tunai'])?>

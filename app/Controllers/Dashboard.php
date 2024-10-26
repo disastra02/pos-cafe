@@ -48,7 +48,21 @@ class Dashboard extends BaseController
 			$tahun = '';
 		}
 
+		$resultMonth = $this->model->getListMonth();
+		$list_bulan = [];
+		foreach ($resultMonth as $val) {
+			$list_bulan[$val['tahun'].' - '.$val['bulan']] = $val['tahun'].' - '.$val['bulan'];
+		}
+
+		if ($list_bulan) {
+			$bulan = max($list_bulan);
+		} else {
+			$bulan = '';
+		}
+
+		$this->data['list_bulan'] = $list_bulan;
 		$this->data['list_tahun'] = $list_tahun;
+		$this->data['bulan'] = $bulan;
 		$this->data['tahun'] = $tahun;
 
 		// Baris pertama
@@ -57,6 +71,7 @@ class Dashboard extends BaseController
 		$this->data['total_nilai_penjualan'] = '';
 		$this->data['total_pelanggan_aktif'] = '';
 		$this->data['penjualan'] = '';
+		$this->data['penjualan_per_hari'] = [];
 		$this->data['total_penjualan'] = '';
 		$this->data['item_terjual'] = '';
 		$this->data['kategori_terjual'] = '';
@@ -68,7 +83,42 @@ class Dashboard extends BaseController
 			$this->data['total_nilai_penjualan'] = $this->model->getTotalNilaiPenjualan($tahun);
 			$this->data['total_pelanggan_aktif'] = $this->model->getTotalPelangganAktif($tahun);
 
-			$this->data['penjualan'] = $this->model->getSeriesPenjualan($list_tahun);
+			if ($bulan) {
+				$pecah_bulan = explode(' - ', $bulan);
+				$this->data['penjualan_per_hari'] = $this->model->getSeriesPenjualanPerHari($pecah_bulan[0], $pecah_bulan[1]);
+			}
+
+			// print_r($this->data['penjualan_per_hari']);
+			// die();
+
+			$dataPenjualan = $this->model->getSeriesPenjualan($list_tahun);
+			$dataAllPenjualan[$tahun] = [];
+
+			$bulanSekarang = date("n");
+			for($i = 1; $i <= $bulanSekarang; $i++) {
+				$ditemukan = false;
+				foreach($dataPenjualan[$tahun] as $penjualan) {
+					if ($i == $penjualan['bulan']) {
+						$dataAllPenjualan[$tahun][] = [
+							'bulan' => $penjualan['bulan'],
+							'JML' => $penjualan['JML'],
+							'total' => $penjualan['total'],
+						];
+
+						$ditemukan = true;
+						break;
+					}
+				}
+				if (!$ditemukan) {
+					$dataAllPenjualan[$tahun][] = [
+						'bulan' => $i,
+						'JML' => 0,
+						'total' => 0,
+					];
+				}
+			}
+
+			$this->data['penjualan'] = $dataAllPenjualan;
 			$this->data['total_penjualan'] = $this->model->getSeriesTotalPenjualan($list_tahun);
 			$this->data['item_terjual'] = $this->model->getItemTerjual($tahun);
 			$this->data['kategori_terjual'] = $this->model->getKategoriTerjual($tahun);
@@ -105,6 +155,24 @@ class Dashboard extends BaseController
 		}
 
 		echo json_encode($total);
+	}
+
+	public function ajaxGetItemPenjualanPerHari()
+	{
+
+		$result = $this->model->getSeriesPenjualanPerHari($_GET['tahun'], $_GET['bulan']);
+		if (!$result)
+			return;
+
+		$data_penjualan = [];
+		$data_labels = [];
+		foreach ($result as $tahun => $arr) {
+			foreach ($arr as $val) {
+				$data_penjualan[$tahun][] = $val['total'];
+				$data_labels[] = $val['tanggal'];
+			}
+		}
+		echo json_encode(['data_penjualan' => $data_penjualan, 'data_label' => $data_labels]);
 	}
 
 	public function ajaxGetItemTerjual()

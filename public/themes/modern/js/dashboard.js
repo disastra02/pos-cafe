@@ -8,6 +8,7 @@ $(document).ready(function() {
 	}
 	
 	dataset_penjualan = [];
+	dataset_penjualan_per_hari = [];
 	colors = ['rgb(99 174 206)', 'rgb(251 179 66)', 'rgb(62 185 110)'];
 	// colors = ['rgb(76 162 199)', 'rgb(250 168 38)', 'rgb(37 176 91)'];
 	
@@ -26,15 +27,77 @@ $(document).ready(function() {
 		);
 		num++;
 	});
+
+	num = 0;
+	Object.keys(data_penjualan_per_hari).map( tahun => {
+		color = colors[num];
+		dataset_penjualan_per_hari.push(
+			{
+				label: tahun,
+				backgroundColor: color,
+				data: data_penjualan_per_hari[tahun],
+				fill: false,
+				borderColor: color,
+				tension: 0.1
+			}
+		);
+		num++;
+	});
 	
 	let dataChartPenjualan = {
 		labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
 		datasets: dataset_penjualan
 	};
+
+	let dataChartPenjualanPerHari = {
+		labels: data_penjualan_per_hari_labels,
+		datasets: dataset_penjualan_per_hari
+	};
 	
 	configChartPenjualan = {
 		type: 'line',
 		data: dataChartPenjualan,
+		options: {
+			responsive: false,
+			maintainAspectRatio: false,
+			plugins: {
+			  legend: {
+				display: true,
+				position: 'top',
+				fullWidth: false,
+				labels: {
+					padding: 10,
+					boxWidth: 30
+				}
+			  }
+			},
+			
+			tooltips: {
+				callbacks: {
+					label: function(tooltipItems, data) {
+						// return data.labels[tooltipItems.index] + ": " + data.datasets[0].data[tooltipItems.index].toLocaleString();
+						// return "Total : " + data.datasets[0].data[tooltipItems.index].toLocaleString();
+						return "Total : " + data.datasets[0].data[tooltipItems.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+					}
+				}
+			},
+			scales: {
+				y: {
+					beginAtZero: false,
+					ticks: {
+						callback: function(value, index, values) {
+							// return value.toLocaleString();
+							return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+						}
+					}
+				}
+			}
+		}
+	}
+
+	configChartPenjualanPerHari = {
+		type: 'line',
+		data: dataChartPenjualanPerHari,
 		options: {
 			responsive: false,
 			maintainAspectRatio: false,
@@ -231,6 +294,10 @@ $(document).ready(function() {
 	/* Penjualan perbulan */
 	var ctx = document.getElementById('bar-container').getContext('2d');
 	window.chartPenjualan = new Chart(ctx, configChartPenjualan);
+
+	/* Penjualan perbulan */
+	var ctx = document.getElementById('bar-container-perhari').getContext('2d');
+	window.chartPenjualanPerHari = new Chart(ctx, configChartPenjualanPerHari);
 	
 	/* Penjualan total */
 	var ctx = document.getElementById('chart-total-penjualan').getContext('2d');
@@ -329,6 +396,45 @@ $(document).ready(function() {
 		});
 	}
 	//-- Stok
+
+	// Penjualan Per Hari
+	$('#filter-perhari').change(function() {
+		let tahunBulan = $(this).val().split(" - ");
+		$this = $(this);
+		$spinner = $('<div class="spinner-container me-2" style="margin:auto">' + 
+								'<div class="spinner-border spinner-border-sm"></div>' +
+							'</div>').prependTo($this.parent());
+							
+		$.get(base_url + 'dashboard/ajaxGetItemPenjualanPerHari?tahun=' + tahunBulan[0] + '&bulan=' + tahunBulan[1], function(data) {
+			$spinner.remove();
+			if (data) {
+				data = JSON.parse(data);
+
+				dataset_penjualan_per_hari = [];
+				num = 0;
+				Object.keys(data.data_penjualan).map( tahun => {
+					dataset_penjualan_per_hari.push(
+						{
+							label: tahun,
+							backgroundColor: 'rgb(99 174 206)',
+							data: data.data_penjualan[tahun],
+							fill: false,
+							borderColor: 'rgb(99 174 206)',
+							tension: 0.1
+						}
+					);
+					num++;
+				});
+
+				configChartPenjualanPerHari.data = {
+					datasets: dataset_penjualan_per_hari,
+					labels: data.data_label
+				}
+
+				chartPenjualanPerHari.update();
+			}
+		});
+	})
 	
 	// Penjualan Tempo
 	if (setting_penjualan_tempo.notifikasi_show == 'Y') 

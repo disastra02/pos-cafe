@@ -14,6 +14,14 @@ class DashboardModel extends \App\Models\BaseModel
 		$result = $this->db->query($sql)->getResultArray();
 		return $result;
 	}
+
+	public function getListMonth() {
+		$sql= 'SELECT YEAR(tgl_penjualan) AS tahun, MONTH(tgl_penjualan) AS bulan
+				FROM penjualan
+				GROUP BY tahun, bulan';
+		$result = $this->db->query($sql)->getResultArray();
+		return $result;
+	}
 	
 	public function getTotalItemTerjual($tahun) 
 	{
@@ -79,6 +87,16 @@ class DashboardModel extends \App\Models\BaseModel
 			
 			$result[$tahun] = $this->db->query($sql)->getResultArray();
 		}
+		return $result;
+	}
+
+	public function getSeriesPenjualanPerHari($tahun, $bulan) {
+		$sql = 'SELECT DAY(tgl_penjualan) AS hari, COUNT(id_penjualan) as JML, SUM(neto) total, DATE(tgl_penjualan) AS tanggal
+			FROM penjualan
+			WHERE MONTH(tgl_penjualan) = "' . $bulan . '" AND YEAR(tgl_penjualan) = "' . $tahun . '"
+			GROUP BY DAY(tgl_penjualan) ORDER BY DAY(tgl_penjualan) ASC';
+		$result[$tahun.' - '.$bulan] = $this->db->query($sql)->getResultArray();
+
 		return $result;
 	}
 	
